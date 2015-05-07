@@ -1,5 +1,5 @@
-IO - Registered Traveller
-=========================
+IO - Scala
+==========
 General Scala IO functionality (written for Registered Traveller but reusable) such as JSON schema validation
 
 Project built with the following (main) technologies:
