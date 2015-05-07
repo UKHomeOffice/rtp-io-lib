@@ -9,6 +9,7 @@ object Build extends Build {
       .settings(
         name := "io-it",
         version := "1.0",
+        organization := "uk.gov.homeoffice",
         scalaVersion := "2.11.6",
         scalacOptions ++= Seq(
           "-feature",
