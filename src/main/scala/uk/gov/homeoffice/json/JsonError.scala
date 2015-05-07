@@ -1,4 +1,4 @@
-package registeredtraveller.json
+package uk.gov.homeoffice.json
 
 import org.json4s.JValue
 import org.json4s.JsonAST.JNothing

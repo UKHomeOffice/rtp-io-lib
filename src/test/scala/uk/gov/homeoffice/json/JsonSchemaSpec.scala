@@ -1,11 +1,12 @@
-package registeredtraveller.json
+package uk.gov.homeoffice.json
 
 import org.json4s.JsonAST.{JObject, JString}
 import org.json4s.native.JsonMethods._
 import org.scalautils.{Bad, Good}
 import org.specs2.mutable.Specification
-import registeredtraveller.json.JsonSchema.BadSchemaException
-import registeredtraveller.json.JsonSchemaSpec._
+import JsonSchema.BadSchemaException
+import JsonSchemaSpec._
+import uk.gov.homeoffice.json.JsonSchema.BadSchemaException
 
 class JsonSchemaSpec extends Specification {
   "JSON schema" should {

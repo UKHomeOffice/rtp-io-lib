@@ -1,4 +1,4 @@
-package registeredtraveller.json
+package uk.gov.homeoffice.json
 
 import java.io.FileNotFoundException
 import org.json4s.JsonAST.{JObject, JString}

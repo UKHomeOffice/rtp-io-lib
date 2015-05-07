@@ -1,4 +1,4 @@
-package registeredtraveller.io
+package uk.gov.homeoffice.io
 
 import java.io.IOException
 import java.net.URL

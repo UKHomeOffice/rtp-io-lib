@@ -1,4 +1,4 @@
-package registeredtraveller.json
+package uk.gov.homeoffice.json
 
 import java.net.URL
 import scala.io.Source
@@ -6,7 +6,7 @@ import scala.util.Try
 import org.json4s.JValue
 import org.json4s.JsonDSL._
 import org.json4s.native.JsonMethods._
-import registeredtraveller.io.IO
+import uk.gov.homeoffice.io.IO
 
 trait Json extends IO {
   val jsonFromUrlContent: URL => Try[JValue] =

@@ -1,4 +1,4 @@
-package registeredtraveller.json
+package uk.gov.homeoffice.json
 
 import scala.collection.JavaConversions._
 import org.json4s.JValue
@@ -8,7 +8,7 @@ import org.scalautils.{Bad, Good, Or}
 import com.github.fge.jackson.JsonLoader
 import com.github.fge.jsonschema.core.exceptions.ProcessingException
 import com.github.fge.jsonschema.main.JsonSchemaFactory
-import registeredtraveller.json.JsonSchema.Validator
+import JsonSchema.Validator
 
 /**
  * TODO

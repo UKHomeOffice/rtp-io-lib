@@ -1,4 +1,4 @@
-package registeredtraveller.json
+package uk.gov.homeoffice.json
 
 import scala.util.Try
 import org.json4s.JsonAST.JNothing

@@ -1,4 +1,4 @@
-package registeredtraveller
+package uk.gov.homeoffice
 
 import com.typesafe.config.ConfigFactory
 
