@@ -35,9 +35,6 @@ Publishing
 To publish the jar to artifactory you will need to 
 
 1. Copy the .credentials file into your <home directory>/.ivy2/
-2. Edit this .credentials file to fill in the artifactory host, user and password
+2. Edit this .credentials file to fill in the artifactory user and password
 
 > activator publish
-
-
-

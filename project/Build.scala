@@ -8,8 +8,8 @@ object Build extends Build {
       .settings(Defaults.itSettings: _*)
       .settings(
         name := "io-it",
-        version := "1.0-SNAPSHOT",
         organization := "uk.gov.homeoffice",
+        version := "1.0-SNAPSHOT",
         scalaVersion := "2.11.6",
         scalacOptions ++= Seq(
           "-feature",
