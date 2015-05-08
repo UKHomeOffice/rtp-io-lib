@@ -1,0 +1,18 @@
+package uk.gov.homeoffice.regex
+
+import org.specs2.mutable.Specification
+
+class RegexSpec extends Specification {
+  "Extract trailing number" should {
+    def trailingInt(s: String): Option[Int] = """\d+$""".r.findFirstIn(s).map(_.toInt)
+
+    "give number" in {
+      trailingInt("item_10") must beSome(10)
+      trailingInt("item10") must beSome(10)
+      trailingInt("it_em_10") must beSome(10)
+      trailingInt("item_01") must beSome(1)
+      trailingInt("item") must beNone
+      trailingInt("item_10_") must beNone
+    }
+  }
+}
