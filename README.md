@@ -55,10 +55,10 @@ Example Usage
 ```scala
   val yourJsonTransformer = new JsonTransformer {
     def transform(json: JValue): JValue Or JsonError = {
-      val (oldJson, newJson) = (
+      val JsonTransformation(oldJson, newJson) = (
         map("name" -> "superName") ~
         mapArray("fee" -> "payment.feeInPence", field => JInt(BigInt(field.extract[String])))
-      )(json, JNothing)
+      )(json)
       
       Good(newJson)
     }

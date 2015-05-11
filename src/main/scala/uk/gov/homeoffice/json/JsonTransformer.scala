@@ -16,7 +16,9 @@ trait JsonTransformer extends JsonFormats {
 
   type PropertyMapping = (FromProperty, ToProperty)
 
-  type JsonTransformation = PartialFunction[(JValue, JValue), (JValue, JValue)]
+  case class JsonTransformation(oldJson: JValue, newJson: JValue)
+
+  implicit def jsonToTransformation(json: JValue): JsonTransformation = JsonTransformation(json, JNothing)
 
   def transform(json: JValue): JValue Or JsonError
 
@@ -39,24 +41,24 @@ trait JsonTransformer extends JsonFormats {
    * map("propertyName" -> "propertyGroup.newPropertyName", property => JInt(BigInt(property.extract[String])))
    * @param propertyMapping he property name mapping e.g "propertyName" -> "propertyGroup.newPropertyName"
    * @param conversion an optional function to convert a property value to another type
-   * @return JsonTransformation
+   * @return PartialFunction[JsonTransformation, JsonTransformation]
    */
-  def map(propertyMapping: PropertyMapping, conversion: JValue => JValue = j => j): JsonTransformation = {
-    case (fromJson, toJson) =>
+  def map(propertyMapping: PropertyMapping, conversion: JValue => JValue = j => j): PartialFunction[JsonTransformation, JsonTransformation] = {
+    case jsonTransformation: JsonTransformation =>
       val (fromProperty, toProperty) = propertyMapping
 
-      val fromJsonUpdated = fromJson removeField { case (k, v) => k == fromProperty }
+      val oldJsonUpdated = jsonTransformation.oldJson removeField { case (k, v) => k == fromProperty }
 
-      val toJsonUpdated = toJson merge {
+      val newJsonUpdated = jsonTransformation.newJson merge {
         def parse(properties: Seq[String]): JValue = properties match {
-          case h +: Nil => h -> convert(fromJson \ fromProperty, conversion)
+          case h +: Nil => h -> convert(jsonTransformation.oldJson \ fromProperty, conversion)
           case h +: t => h -> parse(t)
         }
 
         parse(toProperty.split("\\."))
       }
 
-      (fromJsonUpdated, toJsonUpdated)
+      JsonTransformation(oldJsonUpdated, newJsonUpdated)
   }
 
   /**
@@ -80,24 +82,24 @@ trait JsonTransformer extends JsonFormats {
    * mapArray("propertyName" -> "propertyGroup.newPropertyName", property => JInt(BigInt(property.extract[String])))
    * @param propertyMapping the property name mapping e.g "propertyName" -> "propertyGroup.newPropertyName"
    * @param conversion an optional function to convert a property value to another type
-   * @return JsonTransformation
+   * @return PartialFunction[JsonTransformation, JsonTransformation]
    */
-  def mapArray(propertyMapping: PropertyMapping, conversion: JValue => JValue = j => j): JsonTransformation = {
-    case (fromJson, toJson) =>
+  def mapArray(propertyMapping: PropertyMapping, conversion: JValue => JValue = j => j): PartialFunction[JsonTransformation, JsonTransformation] = {
+    case jsonTransformation: JsonTransformation =>
       val (fromProperty, toProperty) = propertyMapping
 
-      val fromArrayFields = fromJson.filterField {
+      val fromArrayFields = jsonTransformation.oldJson.filterField {
         case (key, value) => key.startsWith(fromProperty)
       } sortWith { case ((k1, _), (k2, _)) => trailingInt(k1) < trailingInt(k2) }
 
-      val fromJsonUpdated = fromJson removeField { case (k, v) => k.startsWith(fromProperty) }
+      val oldJsonUpdated = jsonTransformation.oldJson removeField { case (k, v) => k.startsWith(fromProperty) }
 
-      val toJsonUpdated = {
+      val newJsonUpdated = {
         def parse(properties: Seq[String]): JValue = properties match {
           case h1 +: h2 +: Nil =>
-            toJson \ h1 match {
+            jsonTransformation.newJson \ h1 match {
               case a@JArray(list) =>
-                toJson remove (_ == a) merge {
+                jsonTransformation.newJson remove (_ == a) merge {
                   val updatedList = fromArrayFields.zipWithIndex.foldLeft(list) { case (l, ((key, value), index)) =>
                     l.zipWithIndex.map { case (existing, i) => if (i == index) existing.merge(JObject(h2 -> convert(value, conversion))) else existing }
                   }
@@ -106,7 +108,7 @@ trait JsonTransformer extends JsonFormats {
                 }
 
               case _ =>
-                toJson merge JObject(h1 -> JArray(fromArrayFields.map { case (k, v) => JObject(h2 -> convert(v, conversion)) }))
+                jsonTransformation.newJson merge JObject(h1 -> JArray(fromArrayFields.map { case (k, v) => JObject(h2 -> convert(v, conversion)) }))
             }
 
           case h +: t =>
@@ -116,7 +118,7 @@ trait JsonTransformer extends JsonFormats {
         parse(toProperty.split("\\."))
       }
 
-      (fromJsonUpdated, toJsonUpdated)
+      JsonTransformation(oldJsonUpdated, newJsonUpdated)
   }
   
   def convert(json: JValue, conversion: JValue => JValue) = Try {
