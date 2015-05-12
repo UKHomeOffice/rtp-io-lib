@@ -11,10 +11,43 @@ import org.specs2.specification.Scope
 class JsonTransformerSpec extends Specification with JsonMatchers {
   trait Context extends Scope with JsonTransformer
 
-  "Mapping an array" should {
+  "Mapping JSON" should {
+    "be applied" in  new Context {
+      def transform(json: JValue): JValue Or JsonError = {
+        val JsonTransformation(_, newJson) = (
+          map("field" -> "newField") ~
+          mapArray("fld" -> "flds.newFld")
+        )(json)
+
+        Good(newJson)
+      }
+
+      val flatJson = parse("""
+      {
+        "field": "blah",
+        "fld_1": "something texty",
+        "fld_2": 15
+      }""")
+
+      val json = parse("""
+      {
+        "newField": "blah",
+        "flds": [
+          { "newFld": "something texty" },
+          { "newFld": 15 }
+        ]
+      }""")
+
+      val Good(result) = transform(flatJson)
+
+      result mustEqual json
+    }
+  }
+
+  "Mapping a JSON array" should {
     "successfully map a number of fields to a JArray" in new Context {
       def transform(json: JValue): JValue Or JsonError = {
-        val (_, newJson) = mapArray("fld" -> "flds.newFld")(json, JNothing)
+        val JsonTransformation(_, newJson) = mapArray("fld" -> "flds.newFld")(json)
         Good(newJson)
       }
 
@@ -39,7 +72,7 @@ class JsonTransformerSpec extends Specification with JsonMatchers {
 
     "successfully map a number of fields to a JArray and apply the corresponding conversion" in new Context {
       def transform(json: JValue): JValue Or JsonError = {
-        val (_, newJson) = mapArray("fee" -> "payment.feeInPence", field => JInt(BigInt(field.extract[String])))(json, JNothing)
+        val JsonTransformation(_, newJson) = mapArray("fee" -> "payment.feeInPence", field => JInt(BigInt(field.extract[String])))(json)
         Good(newJson)
       }
 
@@ -66,7 +99,7 @@ class JsonTransformerSpec extends Specification with JsonMatchers {
 
     "transform arrays with elements of 2 digit index" in new Context {
       def transform(json: JValue): JValue Or JsonError = {
-        val (_, newJson) = mapArray("item" -> "items.newItem")(json, JNothing)
+        val JsonTransformation(_, newJson) = mapArray("item" -> "items.newItem")(json)
         Good(newJson)
       }
 
@@ -91,7 +124,7 @@ class JsonTransformerSpec extends Specification with JsonMatchers {
 
     "give bad mapping for array of items with no numbers that indicate their index" in new Context {
       def transform(json: JValue): JValue Or JsonError = {
-        val (_, newJson) = mapArray("fee" -> "payment.feeInPence")(json, JNothing)
+        val JsonTransformation(_, newJson) = mapArray("fee" -> "payment.feeInPence")(json)
         Good(newJson)
       }
 

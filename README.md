@@ -1,5 +1,5 @@
-IO - Scala
-==========
+IO - Scala library with IO functionality
+========================================
 General Scala IO functionality (originally written for Registered Traveller UK, but reusable) such as JSON schema validation
 
 Project built with the following (main) technologies:
@@ -37,7 +37,7 @@ Publishing
 To publish the jar to artifactory you will need to 
 
 1. Copy the .credentials file into your <home directory>/.ivy2/
-2. Edit this .credentials file to fill in the artifactory user and password
+2. Edit this .credentials file to fill in the artifactory security credentials (amend the realm name and host where necessary)
 
 > activator publish
 
@@ -47,6 +47,7 @@ Example Usage
 ```scala
   val json: JValue = getYourJson()
   val schema: JValue = getYourSchema()
+  
   val Good(result) = JsonSchema(schema).validate(json) // Assuming successful validation
 ```
 
@@ -54,13 +55,18 @@ Example Usage
 ```scala
   val yourJsonTransformer = new JsonTransformer {
     def transform(json: JValue): JValue Or JsonError = {
-      val (_, newJson) = mapArray("fee" -> "payment.feeInPence", field => JInt(BigInt(field.extract[String])))(json, JNothing)
+      val JsonTransformation(oldJson, newJson) = (
+        map("name" -> "superName") ~
+        mapArray("fee" -> "payment.feeInPence", field => JInt(BigInt(field.extract[String])))
+      )(json)
+      
       Good(newJson)
     }
   }
   
   val flatJson = parse("""
   {
+    "name": "Batman",
     "fee_1": "12",
     "fee_2": "15",
     "fee_3": 18
@@ -68,6 +74,7 @@ Example Usage
 
   val json = parse("""
   {
+    "superName": "Batman",
     "payment": [
       { "feeInPence": 12 },
       { "feeInPence": 15 },
@@ -75,5 +82,6 @@ Example Usage
     ]
   }""")
 
-  val Good(result) = transform(flatJson) // Assuming successful transformation
+  // Assuming successful transformation
+  transform(flatJson) mustEqual Good(json) 
 ```
