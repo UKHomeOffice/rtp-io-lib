@@ -25,6 +25,7 @@ object Build extends Build {
           "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases",
           "Kamon Repository" at "http://repo.kamon.io"),
         libraryDependencies ++= Seq(
+          "com.typesafe" % "config" % "1.2.1" withSources(),
           "org.json4s" %% "json4s-native" % "3.2.11" withSources(),
           "org.json4s" %% "json4s-ext" % "3.2.11" withSources(),
           "com.github.fge" % "json-schema-validator" % "2.2.6" withSources(),
