@@ -8,7 +8,21 @@ import org.scalautils.Or
 
 /**
  * Transform JSON from one format to another.
+ * The API provides "map" and "mapArray" which are similar.
+ *
+ * JSON to map from (full up)                   Updated JSON to map from (hopefully empty)
+ *       |                                                   |
+ *       |-----------------------> map >---------------------|
+ *       |
+ * JSON to map to (empty)                       Updated JSON to map to (hopefully full up)
+ *
+ * Picture mapping JSON, as handing your (original) JSON to "map" which does the transformation in the following way:
+ * - Take a piece of of JSON from the given JSON to be mapped (at the same time removing said JSON from the given JSON).
+ * - Apply the transformation according to the declared mapping.
+ * - The newly transformed JSON is added to JSON that accumulates all the transformations.
+ * - Upon completion, you should (hopefully) end up with an updated version of the original JSON, now empty, and the new JSON that contains all the transformations.
  */
+
 trait JsonTransformer extends JsonFormats {
   type FromProperty = String
 
