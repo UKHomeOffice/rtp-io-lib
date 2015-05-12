@@ -10,11 +10,13 @@ import org.scalautils.Or
  * Transform JSON from one format to another.
  * The API provides "map" and "mapArray" which are similar.
  *
- * JSON to map from (full up)                   Updated JSON to map from (hopefully empty)
- *       |                                                   |
- *       |-----------------------> map >---------------------|
- *       |
- * JSON to map to (empty)                       Updated JSON to map to (hopefully full up)
+ * JSON to map from (full up) ->                                        -> Updated JSON to map from (hopefully empty)
+ *                              |                                       |
+ *                              -------->                    ---------->
+ *                                       |------> map >------|
+ *                              -------->                    ---------->
+ *                              |                                       |
+ * JSON to map to (empty)------>                                        -> Updated JSON to map to (hopefully full up)
  *
  * Picture mapping JSON, as handing your (original) JSON to "map" which does the transformation in the following way:
  * - Take a piece of of JSON from the given JSON to be mapped (at the same time removing said JSON from the given JSON).
