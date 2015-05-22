@@ -8,6 +8,8 @@ import org.json4s.JsonDSL._
 import org.json4s.native.JsonMethods._
 import uk.gov.homeoffice.io.IO
 
+object Json extends Json
+
 trait Json extends IO {
   val jsonFromUrlContent: URL => Try[JValue] =
     url => urlContentToString(url) map { parse(_) }

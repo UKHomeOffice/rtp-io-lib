@@ -18,7 +18,8 @@ object Build extends Build {
           "-language:existentials",
           "-language:reflectiveCalls",
           "-language:postfixOps",
-          "-Yrangepos"),
+          "-Yrangepos",
+          "-Yrepl-sync"),
         resolvers ++= Seq(
           "Typesafe Repository" at "http://repo.typesafe.com/typesafe/releases/",
           "Sonatype Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/",
