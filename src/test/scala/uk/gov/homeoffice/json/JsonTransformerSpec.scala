@@ -4,11 +4,10 @@ import org.json4s.JsonAST.JInt
 import org.json4s._
 import org.json4s.native.JsonMethods._
 import org.scalautils._
-import org.specs2.matcher.JsonMatchers
 import org.specs2.mutable.Specification
 import org.specs2.specification.Scope
 
-class JsonTransformerSpec extends Specification with JsonMatchers {
+class JsonTransformerSpec extends Specification {
   trait Context extends Scope with JsonTransformer
 
   "Mapping JSON" should {

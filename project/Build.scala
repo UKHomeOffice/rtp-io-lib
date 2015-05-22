@@ -32,5 +32,7 @@ object Build extends Build {
           "com.github.fge" % "json-schema-validator" % "2.2.6" withSources(),
           "org.scalautils" %% "scalautils" % "2.1.5" withSources()),
         libraryDependencies ++= Seq(
-          "org.specs2" %% "specs2" % "2.4.17" % "test, it" withSources()))
+          "org.specs2" %% "specs2-core" % "3.6" % "test, it" withSources(),
+          "org.specs2" %% "specs2-mock" % "3.6" % "test, it" withSources(),
+          "org.specs2" %% "specs2-matcher-extra" % "3.6" % "test, it" withSources()))
 }
