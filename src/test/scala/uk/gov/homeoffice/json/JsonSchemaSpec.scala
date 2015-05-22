@@ -4,9 +4,8 @@ import org.json4s.JsonAST.{JObject, JString}
 import org.json4s.native.JsonMethods._
 import org.scalautils.{Bad, Good}
 import org.specs2.mutable.Specification
-import JsonSchema.BadSchemaException
-import JsonSchemaSpec._
 import uk.gov.homeoffice.json.JsonSchema.BadSchemaException
+import uk.gov.homeoffice.json.JsonSchemaSpec._
 
 class JsonSchemaSpec extends Specification {
   "JSON schema" should {
