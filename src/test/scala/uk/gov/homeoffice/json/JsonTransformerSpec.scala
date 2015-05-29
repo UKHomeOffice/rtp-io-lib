@@ -3,7 +3,7 @@ package uk.gov.homeoffice.json
 import org.json4s.JsonAST.JInt
 import org.json4s._
 import org.json4s.native.JsonMethods._
-import org.scalautils._
+import org.scalactic._
 import org.specs2.mutable.Specification
 import org.specs2.specification.Scope
 

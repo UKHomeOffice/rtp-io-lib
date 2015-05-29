@@ -4,7 +4,7 @@ import scala.util.Try
 import org.json4s.JsonAST.JNothing
 import org.json4s.JsonDSL._
 import org.json4s.{JArray, JObject, JValue, _}
-import org.scalautils.Or
+import org.scalactic.Or
 
 /**
  * Transform JSON from one format to another.
