@@ -2,7 +2,7 @@ package uk.gov.homeoffice.json
 
 import org.json4s.JsonAST.{JObject, JString}
 import org.json4s.native.JsonMethods._
-import org.scalautils.{Bad, Good}
+import org.scalactic.{Good, Bad}
 import org.specs2.mutable.Specification
 import uk.gov.homeoffice.json.JsonSchema.BadSchemaException
 import uk.gov.homeoffice.json.JsonSchemaSpec._
