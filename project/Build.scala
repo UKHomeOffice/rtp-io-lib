@@ -29,7 +29,7 @@ object Build extends Build {
         "org.json4s" %% "json4s-native" % "3.2.11" withSources(),
         "org.json4s" %% "json4s-ext" % "3.2.11" withSources(),
         "com.github.fge" % "json-schema-validator" % "2.2.6" withSources(),
-        "org.scalautils" %% "scalautils" % "2.1.5" withSources()),
+        "org.scalactic" %% "scalactic" % "2.2.4" withSources()),
       libraryDependencies ++= Seq(
         "org.specs2" %% "specs2-core" % "3.6" % "test, it" withSources(),
         "org.specs2" %% "specs2-mock" % "3.6" % "test, it" withSources(),

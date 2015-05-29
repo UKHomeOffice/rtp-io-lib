@@ -1,7 +1,7 @@
 package uk.gov.homeoffice.json
 
 import org.json4s._
-import org.scalautils._
+import org.scalactic.Or
 
 trait JsonValidator {
   def jsonSchema: JsonSchema
