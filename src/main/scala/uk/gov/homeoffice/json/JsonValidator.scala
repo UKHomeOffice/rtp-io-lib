@@ -14,7 +14,7 @@ trait JsonValidator {
 
 object JsonValidator {
   def apply(schema: URL) = new JsonValidator with Json {
-    val jsonSchema: JsonSchema = jsonFromUrlContent(schema) match {
+    val jsonSchema = jsonFromUrlContent(schema) match {
       case Success(s) => JsonSchema(s)
       case Failure(t) => throw new BadSchemaException(s"Failed to create JsonSchema for $path: $t")
     }
