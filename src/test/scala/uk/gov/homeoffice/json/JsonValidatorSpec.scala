@@ -10,7 +10,7 @@ class JsonValidatorSpec extends Specification {
     }
 
     "be invalid" in {
-      JsonValidator(getClass.getResource("/io-test-1.txt")) must throwA[BadSchemaException]
+      JsonValidator(getClass.getResource("/test-1.txt")) must throwA[BadSchemaException]
     }
   }
 }
