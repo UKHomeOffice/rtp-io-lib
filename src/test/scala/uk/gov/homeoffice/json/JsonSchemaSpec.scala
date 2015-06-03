@@ -1,5 +1,6 @@
 package uk.gov.homeoffice.json
 
+import java.net.{MalformedURLException, URL}
 import org.json4s.JsonAST.{JObject, JString}
 import org.json4s.native.JsonMethods._
 import org.scalactic.{Good, Bad}
@@ -9,6 +10,14 @@ import uk.gov.homeoffice.json.JsonSchemaSpec._
 
 class JsonSchemaSpec extends Specification {
   "JSON schema" should {
+    "be invalidated when providing an invalid URL" in {
+      JsonSchema(new URL("")) must throwA[MalformedURLException]
+    }
+
+    "be invalidated when providing a bad schema location" in {
+      JsonSchema(new URL("file:///does-not-exist.json")) must throwA[BadSchemaException](message = "Bad JSON schema URL: file:/does-not-exist.json")
+    }
+
     "be invalidated when providing JSON that is not a schema" in {
       JsonSchema(JObject("bad" -> JString("schema"))) must throwA[BadSchemaException](message = "Given JSON schema is invalid, missing mandatory fields: \\$schema, id, type, properties")
     }

@@ -2,11 +2,13 @@ import sbt.Keys._
 import sbt._
 
 object Build extends Build {
-  lazy val root = Project(id = "rtp-io-lib", base = file("."))
+  val moduleName = "rtp-io-lib"
+
+  lazy val root = Project(id = moduleName, base = file("."))
     .configs(IntegrationTest)
     .settings(Defaults.itSettings: _*)
     .settings(
-      name := "rtp-io-lib",
+      name := moduleName,
       organization := "uk.gov.homeoffice",
       version := "1.0-SNAPSHOT",
       scalaVersion := "2.11.6",
@@ -31,7 +33,7 @@ object Build extends Build {
         "com.github.fge" % "json-schema-validator" % "2.2.6" withSources(),
         "org.scalactic" %% "scalactic" % "2.2.4" withSources()),
       libraryDependencies ++= Seq(
-        "org.specs2" %% "specs2-core" % "3.6" % "test, it" withSources(),
-        "org.specs2" %% "specs2-mock" % "3.6" % "test, it" withSources(),
-        "org.specs2" %% "specs2-matcher-extra" % "3.6" % "test, it" withSources()))
+        "org.specs2" %% "specs2-core" % "3.6" % Test withSources(),
+        "org.specs2" %% "specs2-mock" % "3.6" % Test withSources(),
+        "org.specs2" %% "specs2-matcher-extra" % "3.6" % Test withSources()))
 }

@@ -1,5 +1,6 @@
 package uk.gov.homeoffice.json
 
+import java.net.URL
 import scala.collection.JavaConversions._
 import org.json4s.JValue
 import org.json4s.JsonAST.JNothing
@@ -37,10 +38,12 @@ class JsonSchema(validator: Validator) {
 /**
  * TODO
  */
-object JsonSchema {
+object JsonSchema extends Json {
   type Validator = com.github.fge.jsonschema.main.JsonSchema
 
-  def apply(schema: JValue) = {
+  def apply(schema: URL): JsonSchema = jsonFromUrlContent(schema).map(apply).getOrElse(throw new BadSchemaException(s"Bad JSON schema URL: $schema"))
+
+  def apply(schema: JValue): JsonSchema = {
     // TODO Not sure I like this "val" followed by "if" - Think validation "options" can be given to the underlying validator, but don't know how.
     val missingRequiredProperties = Seq("$schema", "id", "type", "properties").foldLeft(Seq.empty[String]) { (seq, p) =>
       if (schema \ p == JNothing) seq :+ p
