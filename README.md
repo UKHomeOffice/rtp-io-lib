@@ -1,6 +1,6 @@
-IO - Scala library with IO functionality
-========================================
-General Scala IO functionality (originally written for Registered Traveller UK, but reusable) such as JSON schema validation
+Scala library for IO functionality
+==================================
+General Scala IO functionality such as JSON schema validation
 
 Project built with the following (main) technologies:
 
@@ -40,6 +40,8 @@ To publish the jar to artifactory you will need to
 2. Edit this .credentials file to fill in the artifactory security credentials (amend the realm name and host where necessary)
 
 > activator publish
+
+Note that initially this project refers to some libraries held within a private Artifactory. However, those libraries have been open sourced under https://github.com/UKHomeOffice.
 
 Example Usage
 -------------
