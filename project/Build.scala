@@ -11,7 +11,7 @@ object Build extends Build {
       name := moduleName,
       organization := "uk.gov.homeoffice",
       version := "1.0-SNAPSHOT",
-      scalaVersion := "2.11.6",
+      scalaVersion := "2.11.7",
       scalacOptions ++= Seq(
         "-feature",
         "-language:implicitConversions",
