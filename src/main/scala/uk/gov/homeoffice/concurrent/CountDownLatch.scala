@@ -3,6 +3,10 @@ package uk.gov.homeoffice.concurrent
 import java.util.concurrent.{TimeUnit, TimeoutException}
 import scala.concurrent.duration.Duration
 
+object CountDownLatch {
+  def apply(initialCount: Int) = new CountDownLatch(initialCount)
+}
+
 class CountDownLatch(val initialCount: Int) {
   val underlying = new java.util.concurrent.CountDownLatch(initialCount)
 
