@@ -22,6 +22,7 @@ object Build extends Build {
         "-Yrangepos",
         "-Yrepl-sync"),
       resolvers ++= Seq(
+        "Artifactory Snapshot Realm" at "http://artifactory.registered-traveller.homeoffice.gov.uk/artifactory/libs-snapshot-local/",
         "Typesafe Repository" at "http://repo.typesafe.com/typesafe/releases/",
         "Sonatype Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/",
         "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases",
@@ -35,7 +36,5 @@ object Build extends Build {
         "com.github.fge" % "json-schema-validator" % "2.2.6" withSources(),
         "org.scalactic" %% "scalactic" % "2.2.4" withSources()),
       libraryDependencies ++= Seq(
-        "org.specs2" %% "specs2-core" % "3.6.2" % Test withSources(),
-        "org.specs2" %% "specs2-mock" % "3.6.2" % Test withSources(),
-        "org.specs2" %% "specs2-matcher-extra" % "3.6.2" % Test withSources()))
+        "uk.gov.homeoffice" %% "rtp-test-lib" % "1.0-SNAPSHOT" % Test classifier "tests" withSources()))
 }

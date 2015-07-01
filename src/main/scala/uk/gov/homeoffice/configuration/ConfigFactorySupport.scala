@@ -12,6 +12,9 @@ trait ConfigFactorySupport {
   implicit val durationToFiniteDuration: Duration => FiniteDuration =
     d => new FiniteDuration(d.toNanos, TimeUnit.NANOSECONDS)
 
+  implicit val finiteDurationToDuration: FiniteDuration => Duration =
+    f => f.asInstanceOf[Duration]
+
   implicit class ConfiguredFiniteDuration(path: String)(implicit config: Config) {
     def seconds = new FiniteDuration(config.getDuration(path, TimeUnit.SECONDS), TimeUnit.SECONDS)
   }
