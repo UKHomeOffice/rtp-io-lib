@@ -4,7 +4,7 @@ import sbt._
 object Build extends Build {
   val moduleName = "rtp-io-lib"
 
-  lazy val root = Project(id = moduleName, base = file("."))
+  lazy val io = Project(id = moduleName, base = file("."))
     .configs(IntegrationTest)
     .settings(Defaults.itSettings: _*)
     .settings(
@@ -33,8 +33,28 @@ object Build extends Build {
         "com.typesafe" % "config" % "1.3.0" withSources(),
         "org.json4s" %% "json4s-native" % "3.2.11" withSources(),
         "org.json4s" %% "json4s-ext" % "3.2.11" withSources(),
-        "com.github.fge" % "json-schema-validator" % "2.2.6" withSources(),
-        "org.scalactic" %% "scalactic" % "2.2.4" withSources()),
+        "com.github.fge" % "json-schema-validator" % "2.2.6" withSources()),
+      libraryDependencies ++= Seq())
+
+  val testPath = "../rtp-test-lib"
+
+  val root = if (new java.io.File(testPath).exists && sys.props.get("jenkins").isEmpty) {
+    println("=====================")
+    println("Build Locally domain ")
+    println("=====================")
+
+    val testLib = ProjectRef(file(testPath), "rtp-test-lib")
+    io.dependsOn(testLib % "test->test;compile->compile")
+
+  } else {
+    println("========================")
+    println("Build on Jenkins domain ")
+    println("========================")
+
+    io.settings(
       libraryDependencies ++= Seq(
-        "uk.gov.homeoffice" %% "rtp-test-lib" % "1.0-SNAPSHOT" % Test classifier "tests" withSources()))
+        "uk.gov.homeoffice" %% "rtp-test-lib" % "1.0-SNAPSHOT" withSources(),
+        "uk.gov.homeoffice" %% "rtp-test-lib" % "1.0-SNAPSHOT" % Test classifier "tests" withSources()
+      ))
+  }
 }
