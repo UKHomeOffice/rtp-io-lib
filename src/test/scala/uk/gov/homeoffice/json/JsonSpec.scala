@@ -33,13 +33,13 @@ class JsonSpec extends Specification with Json {
     val json = "hello" -> "world"
 
     "give non fatal JSON error" in {
-      error(json)(new IllegalArgumentException) must beLike {
+      bad(json)(new IllegalArgumentException) must beLike {
         case Bad(j) => j.fatalException must beFalse
       }
     }
 
     "give fatal JSON error" in {
-      val fatal = error(json, j => { case i: IllegalArgumentException => Bad(JsonError(j, i.getMessage, Some(i), fatalException = true)) })
+      val fatal = bad(json, j => { case i: IllegalArgumentException => Bad(JsonError(j, i.getMessage, Some(i), fatalException = true)) })
 
       fatal(new IllegalArgumentException) must beLike {
         case Bad(j) => j.fatalException must beTrue
