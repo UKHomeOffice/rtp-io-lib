@@ -32,6 +32,7 @@ object Build extends Build {
         "com.typesafe" % "config" % "1.3.0" withSources(),
         "org.json4s" %% "json4s-native" % "3.2.11" withSources(),
         "org.json4s" %% "json4s-ext" % "3.2.11" withSources(),
+        "org.json4s" %% "json4s-mongo" % "3.2.11" withSources(),
         "com.github.fge" % "json-schema-validator" % "2.2.6" withSources(),
         "org.scala-lang.modules" %% "scala-pickling" % "0.10.1" withSources()),
       libraryDependencies ++= Seq())
