@@ -2,8 +2,8 @@ package uk.gov.homeoffice.json
 
 import java.io.FileNotFoundException
 import org.json4s.JsonDSL._
-import org.json4s.{JObject, JString, JValue}
-import org.scalactic.{Bad, Or}
+import org.json4s.{JObject, JString}
+import org.scalactic.Bad
 import org.specs2.mutable.Specification
 
 class JsonSpec extends Specification with Json {
@@ -39,9 +39,7 @@ class JsonSpec extends Specification with Json {
     }
 
     "give fatal JSON error" in {
-      val fatal = error(json, j => PartialFunction[Throwable, JValue Or JsonError] {
-        case i: IllegalArgumentException => Bad(JsonError(j, i.getMessage, Some(i), fatalException = true))
-      })
+      val fatal = error(json, j => { case i: IllegalArgumentException => Bad(JsonError(j, i.getMessage, Some(i), fatalException = true)) })
 
       fatal(new IllegalArgumentException) must beLike {
         case Bad(j) => j.fatalException must beTrue

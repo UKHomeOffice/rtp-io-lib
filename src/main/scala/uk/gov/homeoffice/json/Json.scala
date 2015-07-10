@@ -23,8 +23,8 @@ trait Json extends IO {
   val jsonFromFilepath: String => Try[JValue] =
     filepath => Try { parse(Source.fromFile(filepath).getLines().mkString) }
 
-  def error(json: JValue, pf: JValue => PartialFunction[Throwable, JValue Or JsonError] = j => PartialFunction.empty[Throwable, JValue Or JsonError]) = {
-    val defaultPF = PartialFunction[Throwable, JValue Or JsonError] {
+  def error[G](json: JValue, pf: JValue => PartialFunction[Throwable, G Or JsonError] = (j: JValue) => PartialFunction.empty[Throwable, G Or JsonError]) = {
+    val defaultPF = PartialFunction[Throwable, G Or JsonError] {
       case e: IOException => Bad(JsonError(json, e.getMessage, Some(e), fatalException = true))
       case NonFatal(n) => Bad(JsonError(json, n.getMessage, Some(n)))
       case t => Bad(JsonError(json, t.getMessage, Some(t), fatalException = true))
