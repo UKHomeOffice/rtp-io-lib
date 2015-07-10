@@ -1,7 +1,9 @@
 package uk.gov.homeoffice.json
 
 import java.io.FileNotFoundException
-import org.json4s.JsonAST.{JObject, JString}
+import org.json4s.JsonDSL._
+import org.json4s.{JObject, JString}
+import org.scalactic.Bad
 import org.specs2.mutable.Specification
 
 class JsonSpec extends Specification with Json {
@@ -24,6 +26,24 @@ class JsonSpec extends Specification with Json {
 
     "not be found" in {
       jsonFromFilepath(path("src/test/resources/blah.json")) must beFailedTry.withThrowable[FileNotFoundException]
+    }
+  }
+
+  "JSON" should {
+    val json = "hello" -> "world"
+
+    "give non fatal JSON error" in {
+      error(json)(new IllegalArgumentException) must beLike {
+        case Bad(j) => j.fatalException must beFalse
+      }
+    }
+
+    "give fatal JSON error" in {
+      val fatal = error(json, j => { case i: IllegalArgumentException => Bad(JsonError(j, i.getMessage, Some(i), fatalException = true)) })
+
+      fatal(new IllegalArgumentException) must beLike {
+        case Bad(j) => j.fatalException must beTrue
+      }
     }
   }
 }
