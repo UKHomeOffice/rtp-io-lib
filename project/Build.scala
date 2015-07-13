@@ -33,15 +33,18 @@ object Build extends Build {
         "com.typesafe" % "config" % "1.3.0" withSources(),
         "org.json4s" %% "json4s-native" % "3.2.11" withSources(),
         "org.json4s" %% "json4s-ext" % "3.2.11" withSources(),
+        "org.json4s" %% "json4s-mongo" % "3.2.11" withSources(),
         "com.github.fge" % "json-schema-validator" % "2.2.6" withSources(),
         "org.scala-lang.modules" %% "scala-pickling" % "0.10.1" withSources()),
       libraryDependencies ++= Seq())
 
   val testPath = "../rtp-test-lib"
-
-  val root = if (new java.io.File(testPath).exists && sys.props.get("jenkins").isEmpty) {
+  def existsLocallyAndNotOnJenkins(filePath: String) = {
+    new java.io.File(filePath).exists && !new java.io.File(filePath + "/nextBuildNumber").exists()
+  }
+  val root = if ((existsLocallyAndNotOnJenkins(testPath) || existsLocallyAndNotOnJenkins("../" + testPath)) && sys.props.get("jenkins").isEmpty) {
     println("=====================")
-    println("Build Locally domain ")
+    println("Build Locally io     ")
     println("=====================")
 
     val testLib = ProjectRef(file(testPath), "rtp-test-lib")
@@ -49,7 +52,7 @@ object Build extends Build {
 
   } else {
     println("========================")
-    println("Build on Jenkins domain ")
+    println("Build on Jenkins io     ")
     println("========================")
 
     io.settings(
