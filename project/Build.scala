@@ -38,10 +38,12 @@ object Build extends Build {
       libraryDependencies ++= Seq())
 
   val testPath = "../rtp-test-lib"
-
-  val root = if (new java.io.File(testPath).exists && sys.props.get("jenkins").isEmpty) {
+  def existsLocallyAndNotOnJenkins(filePath: String) = {
+    new java.io.File(filePath).exists && !new java.io.File(filePath + "/nextBuildNumber").exists()
+  }
+  val root = if ((existsLocallyAndNotOnJenkins(testPath) || existsLocallyAndNotOnJenkins("../" + testPath)) && sys.props.get("jenkins").isEmpty) {
     println("=====================")
-    println("Build Locally domain ")
+    println("Build Locally io     ")
     println("=====================")
 
     val testLib = ProjectRef(file(testPath), "rtp-test-lib")
@@ -49,7 +51,7 @@ object Build extends Build {
 
   } else {
     println("========================")
-    println("Build on Jenkins domain ")
+    println("Build on Jenkins io     ")
     println("========================")
 
     io.settings(
