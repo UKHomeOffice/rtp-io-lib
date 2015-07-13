@@ -1,5 +1,7 @@
 package uk.gov.homeoffice.json
 
+import grizzled.slf4j.Logging
+
 import scala.util.Try
 import org.json4s.JsonAST.JNothing
 import org.json4s.JsonDSL._
@@ -25,7 +27,7 @@ import org.scalactic.Or
  * - Upon completion, you should (hopefully) end up with an updated version of the original JSON, now empty, and the new JSON that contains all the transformations.
  */
 
-trait JsonTransformer extends JsonFormats {
+trait JsonTransformer extends JsonFormats with Logging {
   type FromProperty = String
 
   type ToProperty = String
@@ -140,7 +142,7 @@ trait JsonTransformer extends JsonFormats {
   def convert(json: JValue, conversion: JValue => JValue) = Try {
     conversion(json)
   } getOrElse {
-    println(s"Failed to apply conversion to (and so leaving as is): $json")
+    warn(s"Failed to apply conversion to (and so leaving as is): $json")
     json
   }
 

@@ -1,6 +1,7 @@
 package uk.gov.homeoffice.json
 
 import java.net.{MalformedURLException, URL}
+import grizzled.slf4j.Logging
 import org.json4s.JsonAST.{JObject, JString}
 import org.json4s.native.JsonMethods._
 import org.scalactic.{Good, Bad}
@@ -8,7 +9,7 @@ import org.specs2.mutable.Specification
 import uk.gov.homeoffice.json.JsonSchema.BadSchemaException
 import uk.gov.homeoffice.json.JsonSchemaSpec._
 
-class JsonSchemaSpec extends Specification {
+class JsonSchemaSpec extends Specification with Logging {
   "JSON schema" should {
     "be invalidated when providing an invalid URL" in {
       JsonSchema(new URL("")) must throwA[MalformedURLException]
@@ -56,9 +57,9 @@ class JsonSchemaSpec extends Specification {
         ko
       } catch {
         case e: BadSchemaException =>
-          println("===   Example of 'bad JSON schema' exception message   ===")
-          println(e.getMessage)
-          println("=== End Example of 'bad JSON schema' exception message ===")
+          info("===   Example of 'bad JSON schema' exception message   ===")
+          info(e)
+          info("=== End Example of 'bad JSON schema' exception message ===")
           ok
       }
     }
