@@ -90,7 +90,9 @@ Example Usage
 
 JSON Schema Validation
 ----------------------
-A JSON schema can be validated from the Scala REPL by doing the following:
+There are several online JSON schema validation tools such as [JSON Schema Validator](http://www.jsonschemavalidator.net/)
+
+Alternatively, a JSON schema can be validated from the Scala REPL by doing the following:
 
 > sbt
 
