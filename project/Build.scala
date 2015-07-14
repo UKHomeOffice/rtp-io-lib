@@ -39,9 +39,9 @@ object Build extends Build {
       libraryDependencies ++= Seq())
 
   val testPath = "../rtp-test-lib"
-  def existsLocallyAndNotOnJenkins(filePath: String) = {
-    new java.io.File(filePath).exists && !new java.io.File(filePath + "/nextBuildNumber").exists()
-  }
+
+  def existsLocallyAndNotOnJenkins(filePath: String) = file(filePath).exists && !file(filePath + "/nextBuildNumber").exists()
+
   val root = if ((existsLocallyAndNotOnJenkins(testPath) || existsLocallyAndNotOnJenkins("../" + testPath)) && sys.props.get("jenkins").isEmpty) {
     println("=====================")
     println("Build Locally io     ")

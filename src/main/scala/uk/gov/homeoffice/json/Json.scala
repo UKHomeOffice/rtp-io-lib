@@ -23,7 +23,8 @@ trait Json extends IO {
   val jsonFromFilepath: String => Try[JValue] =
     filepath => Try { parse(Source.fromFile(filepath).getLines().mkString) }
 
-  def bad[G](json: JValue, pf: JValue => PartialFunction[Throwable, G Or JsonError] = (j: JValue) => PartialFunction.empty[Throwable, G Or JsonError]) = {
+  // TODO Scaladoc
+  /*def bad[G](json: JValue, pf: JValue => PartialFunction[Throwable, G Or JsonError] = (j: JValue) => PartialFunction.empty[Throwable, G Or JsonError]) = {
     val defaultPF = PartialFunction[Throwable, G Or JsonError] {
       case e: IOException => Bad(JsonError(json, e.getMessage, Some(e), fatalException = true))
       case NonFatal(n) => Bad(JsonError(json, n.getMessage, Some(n)))
@@ -31,7 +32,7 @@ trait Json extends IO {
     }
 
     pf(json) orElse defaultPF
-  }
+  }*/
 
   implicit class JFieldOps(jfield: (String, JValue)) {
     def merge(json: JValue) = (jfield: JValue) merge json

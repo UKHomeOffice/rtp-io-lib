@@ -1,12 +1,11 @@
 package uk.gov.homeoffice.json
 
-import grizzled.slf4j.Logging
-
 import scala.util.Try
 import org.json4s.JsonAST.JNothing
 import org.json4s.JsonDSL._
 import org.json4s.{JArray, JObject, JValue, _}
 import org.scalactic.Or
+import grizzled.slf4j.Logging
 
 /**
  * Transform JSON from one format to another.

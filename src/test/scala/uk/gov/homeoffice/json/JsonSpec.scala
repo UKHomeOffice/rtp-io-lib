@@ -29,7 +29,7 @@ class JsonSpec extends Specification with Json {
     }
   }
 
-  "JSON" should {
+  /*"JSON" should {
     val json = "hello" -> "world"
 
     "give non fatal JSON error" in {
@@ -45,5 +45,5 @@ class JsonSpec extends Specification with Json {
         case Bad(j) => j.fatalException must beTrue
       }
     }
-  }
+  }*/
 }
