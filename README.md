@@ -87,3 +87,21 @@ Example Usage
   // Assuming successful transformation
   transform(flatJson) mustEqual Good(json) 
 ```
+
+JSON Schema Validation
+----------------------
+A JSON schema can be validated from the Scala REPL by doing the following:
+
+> sbt
+
+> console
+
+> import uk.gov.homeoffice.json._
+
+> import uk.gov.homeoffice.json.Json._
+
+> jsonFromFilepath("../home-office-schemas/src/main/resources/getcode-schema.json") map { JsonSchema(_) }
+
+If you've given a valid file path and the schema is valid, the result will be something like:
+
+res3: scala.util.Try[uk.gov.homeoffice.json.JsonSchema] = Success(uk.gov.homeoffice.json.JsonSchema@7568db95)
