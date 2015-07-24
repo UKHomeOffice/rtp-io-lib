@@ -13,6 +13,9 @@ trait ConfigFactorySupport {
   implicit val javaDurationToFiniteDuration: JavaDuration => FiniteDuration =
     d => new FiniteDuration(d.toNanos, TimeUnit.NANOSECONDS)
 
+  implicit val durationToFiniteDuration: Duration => FiniteDuration =
+    d => new FiniteDuration(d.toNanos, TimeUnit.NANOSECONDS)
+
   implicit val finiteDurationToJavaDuration: FiniteDuration => JavaDuration =
     f => f.asInstanceOf[JavaDuration]
 
