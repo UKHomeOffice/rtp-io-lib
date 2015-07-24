@@ -32,5 +32,9 @@ trait ConfigFactorySupport {
     def int(path: String, default: Int): Int = Try {
       config.getInt(path)
     } getOrElse default
+
+    def boolean(path: String, default: Boolean): Boolean = Try {
+      config.getBoolean(path)
+    } getOrElse default
   }
 }
