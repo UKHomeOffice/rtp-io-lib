@@ -35,7 +35,8 @@ object Build extends Build {
         "org.json4s" %% "json4s-ext" % "3.2.11" withSources(),
         "org.json4s" %% "json4s-mongo" % "3.2.11" withSources(),
         "com.github.fge" % "json-schema-validator" % "2.2.6" withSources(),
-        "org.scala-lang.modules" %% "scala-pickling" % "0.10.1" withSources()),
+        "org.scala-lang.modules" %% "scala-pickling" % "0.10.1" withSources(),
+        "com.lihaoyi" %% "pprint" % "0.3.4"),
       libraryDependencies ++= Seq())
 
   val testPath = "../rtp-test-lib"
