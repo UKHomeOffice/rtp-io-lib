@@ -9,7 +9,7 @@ import org.scalactic.{Bad, Good, Or}
 import com.github.fge.jackson.JsonLoader
 import com.github.fge.jsonschema.core.exceptions.ProcessingException
 import com.github.fge.jsonschema.main.JsonSchemaFactory
-import JsonSchema.Validator
+import uk.gov.homeoffice.json.JsonSchema.Validator
 
 /**
  * TODO
@@ -27,11 +27,11 @@ class JsonSchema(validator: Validator) {
         message = processingMessage.toString if !message.contains("the following keywords are unknown and will be ignored")
       } yield message
 
-      Bad(JsonError(json, errorMessages.mkString(", ")))
+      Bad(JsonError(json, Some(errorMessages.mkString(", "))))
     }
   } catch {
-    case e: ProcessingException => Bad(JsonError(json, e.getProcessingMessage.getMessage, Some(e)))
-    case t: Throwable => Bad(JsonError(json, t.getMessage, Some(t)))
+    case e: ProcessingException => Bad(JsonError(json, Some(e.getProcessingMessage.getMessage), Some(e)))
+    case t: Throwable => Bad(JsonError(json, Some(t.getMessage), Some(t)))
   }
 }
 
