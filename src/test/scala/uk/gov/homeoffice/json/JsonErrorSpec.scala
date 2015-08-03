@@ -7,6 +7,7 @@ import org.json4s.native.JsonMethods._
 class JsonErrorSpec extends Specification {
 
   "Exception" should {
+
     "be converted to JSON" in {
 
       val exception = new Exception("There was an error")
@@ -33,7 +34,7 @@ class JsonErrorSpec extends Specification {
              "method": "method2"
              "line": 165
             },
-                         {
+            {
              "file": "file3"
              "class": "class3"
              "method": "method3"
