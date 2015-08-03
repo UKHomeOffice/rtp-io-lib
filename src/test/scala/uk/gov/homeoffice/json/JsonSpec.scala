@@ -1,9 +1,7 @@
 package uk.gov.homeoffice.json
 
 import java.io.FileNotFoundException
-import org.json4s.JsonDSL._
 import org.json4s.{JObject, JString}
-import org.scalactic.Bad
 import org.specs2.mutable.Specification
 
 class JsonSpec extends Specification with Json {

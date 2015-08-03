@@ -76,7 +76,7 @@ class JsonSchemaSpec extends Specification with Logging {
         "bad": "data"
       }""")
 
-      val Bad(JsonError(j, error, _)) = JsonSchema(schema).validate(json)
+      val Bad(JsonError(j, Some(error), _)) = JsonSchema(schema).validate(json)
       error must contain("""missing: ["address","phoneNumbers"]""")
       j mustEqual json
     }
