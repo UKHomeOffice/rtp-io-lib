@@ -3,6 +3,10 @@ package uk.gov.homeoffice.json
 import org.json4s.JsonAST.{JInt, JString}
 import org.json4s._
 
+trait JValuable[V] {
+  def asJValue(v: V): JValue
+}
+
 object JValuable {
   /**
    * Transform the value of a given field (first parameter of tuple transformation) for some JSON (an implicit JValue)
@@ -13,10 +17,6 @@ object JValuable {
    */
   def transform[V : JValuable](transformation: (JValue, V))(implicit json: JValue): JValue = json transformField {
     case (k, v) if v == transformation._1 => k -> implicitly[JValuable[V]].asJValue(transformation._2)
-  }
-
-  trait JValuable[V] {
-    def asJValue(v: V): JValue
   }
 
   implicit object StringJValuable extends JValuable[String] {
