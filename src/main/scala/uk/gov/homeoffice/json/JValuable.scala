@@ -4,7 +4,14 @@ import org.json4s.JsonAST.{JInt, JString}
 import org.json4s._
 
 object JValuable {
-  def transform[V : JValuable](transformation: (JValue, V))(implicit jvalue: JValue) = jvalue transformField {
+  /**
+   * Transform the value of a given field (first parameter of tuple transformation) for some JSON (an implicit JValue)
+   * @param transformation Two parameter tuple where the first parameter is the field to be transformed and the second is the new value
+   * @param json JValue of the overall JSON containing the field to be transformed
+   * @tparam V The new value of the transformation
+   * @return JValue of the (new) JSON containing the field that has been transformed
+   */
+  def transform[V : JValuable](transformation: (JValue, V))(implicit json: JValue): JValue = json transformField {
     case (k, v) if v == transformation._1 => k -> implicitly[JValuable[V]].asJValue(transformation._2)
   }
 
