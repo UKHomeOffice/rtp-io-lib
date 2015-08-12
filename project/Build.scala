@@ -44,17 +44,17 @@ object Build extends Build {
   def existsLocallyAndNotOnJenkins(filePath: String) = file(filePath).exists && !file(filePath + "/nextBuildNumber").exists()
 
   val root = if ((existsLocallyAndNotOnJenkins(testPath) || existsLocallyAndNotOnJenkins("../" + testPath)) && sys.props.get("jenkins").isEmpty) {
-    println("=====================")
-    println("Build Locally io     ")
-    println("=====================")
+    println("================")
+    println("Build locally io")
+    println("================")
 
     val testLib = ProjectRef(file(testPath), "rtp-test-lib")
     io.dependsOn(testLib % "test->test;compile->compile")
 
   } else {
-    println("========================")
-    println("Build on Jenkins io     ")
-    println("========================")
+    println("===================")
+    println("Build on Jenkins io")
+    println("===================")
 
     io.settings(
       libraryDependencies ++= Seq(

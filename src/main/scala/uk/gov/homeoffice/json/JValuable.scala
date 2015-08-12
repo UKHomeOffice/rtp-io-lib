@@ -34,6 +34,10 @@ object JValuable extends JsonFormats {
     def asJValue(v: JValue) = v
   }
 
+  implicit object JArrayJValuable extends JValuable[JArray] {
+    def asJValue(v: JArray) = v
+  }
+
   implicit object StringJValuable extends JValuable[String] {
     def asJValue(v: String) = JString(v)
   }
