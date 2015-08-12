@@ -35,13 +35,29 @@ object JValuable extends JsonFormats {
     }
   }
 
-  implicit object JValuable extends JValuable[JValue] {
-    def asJValue(v: JValue) = v
+  implicit object JObjectJValuable extends JValuable[JObject] {
+    def asJValue(v: JObject) = v
   }
 
-  /*implicit object JArrayJValuable extends JValuable[JArray] {
+  implicit object JArrayJValuable extends JValuable[JArray] {
     def asJValue(v: JArray) = v
-  }*/
+  }
+
+  implicit object JStringJValuable extends JValuable[JString] {
+    def asJValue(v: JString) = v
+  }
+
+  implicit object JDecimalJValuable extends JValuable[JDecimal] {
+    def asJValue(v: JDecimal) = v
+  }
+
+  implicit object JIntJValuable extends JValuable[JInt] {
+    def asJValue(v: JInt) = v
+  }
+
+  implicit object JBoolJValuable extends JValuable[JBool] {
+    def asJValue(v: JBool) = v
+  }
 
   implicit object StringJValuable extends JValuable[String] {
     def asJValue(v: String) = JString(v)
