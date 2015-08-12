@@ -27,12 +27,17 @@ object JValuable extends JsonFormats {
    * @return JValue of the (new) JSON containing the field that has been transformed
    */
   def transform[V : JValuable](transformation: (JValue, V => V))(implicit json: JValue): JValue = json transformField {
-    case (k, v) if v == transformation._1 => k -> implicitly[JValuable[V]].asJValue(transformation._2(v.extract[Any].asInstanceOf[V]))
+    case (k, v) if v == transformation._1 => try {
+      k -> implicitly[JValuable[V]].asJValue(transformation._2(v.extract[Any].asInstanceOf[V]))
+    } catch {
+      case t: Throwable =>
+        k -> implicitly[JValuable[V]].asJValue(transformation._2(v.asInstanceOf[V]))
+    }
   }
 
-  implicit object JValuable extends JValuable[JValue] {
+  /*implicit object JValuable extends JValuable[JValue] {
     def asJValue(v: JValue) = v
-  }
+  }*/
 
   implicit object JArrayJValuable extends JValuable[JArray] {
     def asJValue(v: JArray) = v
