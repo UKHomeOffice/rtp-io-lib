@@ -35,13 +35,13 @@ object JValuable extends JsonFormats {
     }
   }
 
-  /*implicit object JValuable extends JValuable[JValue] {
+  implicit object JValuable extends JValuable[JValue] {
     def asJValue(v: JValue) = v
-  }*/
-
-  implicit object JArrayJValuable extends JValuable[JArray] {
-    def asJValue(v: JArray) = v
   }
+
+  /*implicit object JArrayJValuable extends JValuable[JArray] {
+    def asJValue(v: JArray) = v
+  }*/
 
   implicit object StringJValuable extends JValuable[String] {
     def asJValue(v: String) = JString(v)
