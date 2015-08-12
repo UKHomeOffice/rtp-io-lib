@@ -30,6 +30,10 @@ object JValuable extends JsonFormats {
     case (k, v) if v == transformation._1 => k -> implicitly[JValuable[V]].asJValue(transformation._2(v.extract[Any].asInstanceOf[V]))
   }
 
+  implicit object JValuable extends JValuable[JValue] {
+    def asJValue(v: JValue) = v
+  }
+
   implicit object StringJValuable extends JValuable[String] {
     def asJValue(v: String) = JString(v)
   }
