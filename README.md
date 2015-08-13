@@ -34,11 +34,6 @@ To run the specs:
 To run integration specs:
 > sbt it:test
 
-The project can be "assembled" into a "one JAR":
-> sbt assembly
-
-Note that "assembly" will first compile and test.
-
 Publishing
 ----------
 To publish the jar to artifactory you will need to 
