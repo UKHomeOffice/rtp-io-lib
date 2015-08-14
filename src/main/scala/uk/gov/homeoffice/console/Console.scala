@@ -2,8 +2,8 @@ package uk.gov.homeoffice.console
 
 trait Console {
   def present(s: String) = {
-    val border = "***" + s.map(_ => "*").mkString + "***"
-    val subBorder = "*" + border.map(_ => " ").drop(2).mkString + "*"
+    val border = "***" + ("*" * s.length) + "***"
+    val subBorder = "*" + (" " * (s.length + 4)) + "*"
 
     println(
       s"""$border
