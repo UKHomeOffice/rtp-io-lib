@@ -4,7 +4,7 @@ import java.net.URL
 import scala.collection.JavaConversions._
 import org.json4s.JValue
 import org.json4s.JsonAST.JNothing
-import org.json4s.native.JsonMethods._
+import org.json4s.jackson.JsonMethods._
 import org.scalactic.{Bad, Good, Or}
 import com.github.fge.jackson.JsonLoader
 import com.github.fge.jsonschema.core.exceptions.ProcessingException

@@ -2,7 +2,7 @@ package uk.gov.homeoffice.pickle
 
 import scala.pickling.Defaults._
 import scala.pickling.json._
-import org.json4s.native.JsonMethods._
+import org.json4s.jackson.JsonMethods._
 import org.specs2.mutable.Specification
 import uk.gov.homeoffice.json.{JsonFormats => Json4sFormats}
 

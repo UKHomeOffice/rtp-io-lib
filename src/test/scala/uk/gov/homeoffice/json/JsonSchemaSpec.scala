@@ -3,7 +3,7 @@ package uk.gov.homeoffice.json
 import java.net.{MalformedURLException, URL}
 import grizzled.slf4j.Logging
 import org.json4s.JsonAST.{JObject, JString}
-import org.json4s.native.JsonMethods._
+import org.json4s.jackson.JsonMethods._
 import org.scalactic.{Good, Bad}
 import org.specs2.mutable.Specification
 import uk.gov.homeoffice.json.JsonSchema.BadSchemaException
@@ -133,7 +133,7 @@ object JsonSchemaSpec {
           "type": "object",
           "properties": {
             "location": {
-              "type": "string"
+              "type": "string",
               "minLength": 4
             },
             "code": {
@@ -150,6 +150,5 @@ object JsonSchemaSpec {
       "address",
       "phoneNumbers"
     ]
-  }
-  """)
+  }""")
 }

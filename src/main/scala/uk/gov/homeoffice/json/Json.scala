@@ -5,7 +5,7 @@ import scala.io.Source
 import scala.util.Try
 import org.json4s.JValue
 import org.json4s.JsonDSL._
-import org.json4s.native.JsonMethods._
+import org.json4s.jackson.JsonMethods._
 import uk.gov.homeoffice.io.IO
 
 object Json extends Json

@@ -31,7 +31,7 @@ object Build extends Build {
         "org.clapper" %% "grizzled-slf4j" % "1.0.2",
         "ch.qos.logback" % "logback-classic" % "1.1.3",
         "com.typesafe" % "config" % "1.3.0" withSources(),
-        "org.json4s" %% "json4s-native" % "3.2.11" withSources(),
+        "org.json4s" %% "json4s-jackson" % "3.2.11" withSources(),
         "org.json4s" %% "json4s-ext" % "3.2.11" withSources(),
         "org.json4s" %% "json4s-mongo" % "3.2.11" withSources(),
         "com.github.fge" % "json-schema-validator" % "2.2.6" withSources(),

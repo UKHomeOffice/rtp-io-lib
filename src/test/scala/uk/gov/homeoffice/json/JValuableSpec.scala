@@ -1,7 +1,7 @@
 package uk.gov.homeoffice.json
 
 import org.specs2.mutable.Specification
-import org.json4s.native.JsonMethods._
+import org.json4s.jackson.JsonMethods._
 import uk.gov.homeoffice.json.JValuable._
 
 class JValuableSpec extends Specification with JsonFormats {

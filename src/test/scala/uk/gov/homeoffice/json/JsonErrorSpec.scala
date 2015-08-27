@@ -1,14 +1,11 @@
 package uk.gov.homeoffice.json
 
 import org.specs2.mutable.Specification
-import org.json4s.native.JsonMethods._
+import org.json4s.jackson.JsonMethods._
 
 class JsonErrorSpec extends Specification {
-
   "JsonError" should {
-
     "be converted to JSON" in {
-
       val exception = new Exception("There was an error")
 
       exception.setStackTrace(Array(
@@ -26,27 +23,26 @@ class JsonErrorSpec extends Specification {
          "errorMessage": "There was an error",
          "stackTrace": [
            {
-            "file": "file1"
-            "class": "class1"
-            "method": "method1"
+            "file": "file1",
+            "class": "class1",
+            "method": "method1",
             "line": 23
            },
           {
-           "file": "file2"
-           "class": "class2"
-           "method": "method2"
+           "file": "file2",
+           "class": "class2",
+           "method": "method2",
            "line": 165
           },
           {
-           "file": "file3"
-           "class": "class3"
-           "method": "method3"
+           "file": "file3",
+           "class": "class3",
+           "method": "method3",
            "line": 12
-          },
+          }
          ]
        }
-      }
-      """)
+      }""")
 
       jsonError.asJson mustEqual expectedJSON
     }

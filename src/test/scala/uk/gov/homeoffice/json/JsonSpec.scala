@@ -1,10 +1,12 @@
 package uk.gov.homeoffice.json
 
 import java.io.FileNotFoundException
+import org.json4s.jackson.JsonMethods._
 import org.json4s.{JObject, JString}
 import org.specs2.mutable.Specification
+import uk.gov.homeoffice.json.stuff.{MoreStuff, MyStuff}
 
-class JsonSpec extends Specification with Json {
+class JsonSpec extends Specification with Json with JsonFormats {
   "Classpath JSON resource" should {
     "give its content" in {
       jsonFromClasspath(path("/test-2.json")) must beSuccessfulTry { JObject("hello" -> JString("world!")) }
@@ -24,6 +26,22 @@ class JsonSpec extends Specification with Json {
 
     "not be found" in {
       jsonFromFilepath(path("src/test/resources/blah.json")) must beFailedTry.withThrowable[FileNotFoundException]
+    }
+  }
+
+  "JSON" should {
+    "be extracted to a case class" in {
+      val json = parse("""
+      {
+        "id": "Stuff ID",
+        "moreStuff": {
+          "howMuch": 10
+        }
+      }""")
+
+      json.extract[MyStuff] must beLike[MyStuff] {
+        case MyStuff(_, MoreStuff(howMuch)) => howMuch mustEqual 10
+      }
     }
   }
 
