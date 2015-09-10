@@ -1,11 +1,14 @@
 package uk.gov.homeoffice.io
 
-import java.io.{IOException, File}
+import java.io.{InputStream, IOException, File}
 import java.net.URL
 import scala.io.Source
 import scala.util.{Success, Failure, Try}
 
 trait IO {
+  val classpathResource: String => InputStream =
+    classpath => getClass.getResourceAsStream(classpath)
+
   val fromClasspath: String => Try[URL] =
     classpath => Try {
       getClass.getResource(classpath)
