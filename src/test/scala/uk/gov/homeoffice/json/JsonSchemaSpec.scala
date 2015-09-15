@@ -24,7 +24,7 @@ class JsonSchemaSpec extends Specification with Logging {
     }
 
     "be invalidated when providing JSON that does not conform to the JSON schema specification" in {
-      val schema = parse( """
+      val schema = parse("""
       {
         "id": "http://www.bad.com/schema",
         "$schema": "http://json-schema.org/draft-04/schema",
@@ -40,7 +40,7 @@ class JsonSchemaSpec extends Specification with Logging {
     }
 
     "be invalidated when providing JSON that does not conform to the JSON schema specification and print to console the generated error message" in {
-      val schema = parse( """
+      val schema = parse("""
       {
         "id": "http://www.bad.com/schema",
         "$schema": "http://json-schema.org/draft-04/schema",
@@ -71,18 +71,18 @@ class JsonSchemaSpec extends Specification with Logging {
 
   "JSON" should {
     "highlight errors when failing to validate against schema" in {
-      val json = parse( """
+      val json = parse("""
       {
         "bad": "data"
       }""")
 
       val Bad(JsonError(j, Some(error), _)) = JsonSchema(schema).validate(json)
-      error must contain( """missing: ["address","phoneNumbers"]""")
+      error must contain("""missing: ["address","phoneNumbers"]""")
       j mustEqual json
     }
 
     "validate against schema" in {
-      val json = parse( """
+      val json = parse("""
       {
         "address": {
           "street": "The Street",
@@ -106,7 +106,7 @@ class JsonSchemaSpec extends Specification with Logging {
 }
 
 object JsonSchemaSpec {
-  val schema = parse( """
+  val schema = parse("""
   {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "id": "http://www.bad.com/schema",
