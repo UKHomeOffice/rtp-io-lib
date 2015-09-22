@@ -1,25 +1,26 @@
 package uk.gov.homeoffice.logging
 
 import java.io.{ByteArrayOutputStream, PrintStream}
-import org.specs2.matcher.Scope
+import org.specs2.mutable.Specification
 
 trait ConsoleLogging {
-  this: Scope =>
+  this: Specification =>
 
-  val baos = new ByteArrayOutputStream
+  isolated
 
-  val ps = new PrintStream(baos)
+  val sysOutOriginal = System.out
+  val sysErrorOriginal = System.err
 
-  def consoleLog = baos.toString
-
-  def withConsoleRedirect[T](block: => T) = {
-    val sysOutOriginal = System.out
-    val sysErrorOriginal = System.err
+  def withConsoleLog[R](block: (() => String) => R) = {
+    val baos = new ByteArrayOutputStream
+    val ps = new PrintStream(baos)
 
     System.setOut(ps)
     System.setErr(ps)
 
-    val result = block
+    val consoleLog: () => String = baos.toString
+
+    val result = block(consoleLog)
 
     System.setOut(sysOutOriginal)
     System.setErr(sysErrorOriginal)
