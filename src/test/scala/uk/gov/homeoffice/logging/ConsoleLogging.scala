@@ -1,16 +1,31 @@
 package uk.gov.homeoffice.logging
 
-import java.io.{PrintStream, ByteArrayOutputStream}
-import grizzled.slf4j.Logging
+import java.io.{ByteArrayOutputStream, PrintStream}
+import scala.collection.mutable
 
 trait ConsoleLogging {
-  this: Logging =>
+  val outputStreams = mutable.Map[Thread, ByteArrayOutputStream]()
 
-  val baos = new ByteArrayOutputStream
-  val ps = new PrintStream(baos)
+  def consoleLog = outputStreams(Thread.currentThread()).toString
 
-  System.setOut(ps)
-  System.setErr(ps)
+  def withConsoleRedirect[T](block: => T) = {
+    val baos = new ByteArrayOutputStream
+    outputStreams.update(Thread.currentThread(), baos)
 
-  def consoleLog: String = baos.toString
+    val ps = new PrintStream(baos)
+
+    val sysOutOriginal = System.out
+    val sysErrorOriginal = System.err
+
+    System.setOut(ps)
+    System.setErr(ps)
+
+    val result = block
+
+    System.setOut(sysOutOriginal)
+    System.setErr(sysErrorOriginal)
+    outputStreams.remove(Thread.currentThread())
+
+    result
+  }
 }
