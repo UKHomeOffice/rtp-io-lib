@@ -23,4 +23,13 @@ trait Json extends IO {
   implicit class JFieldOps(jfield: (String, JValue)) {
     def merge(json: JValue) = (jfield: JValue) merge json
   }
+
+  def asJson(t: Throwable): JValue =
+    ("errorMessage" -> t.getMessage) ~
+      ("stackTrace" -> t.getStackTrace.toList.map { st =>
+        ("file" -> st.getFileName) ~
+          ("class" -> st.getClassName) ~
+          ("method" -> st.getMethodName) ~
+          ("line" -> st.getLineNumber)
+      })
 }

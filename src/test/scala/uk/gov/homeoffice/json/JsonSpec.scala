@@ -1,6 +1,7 @@
 package uk.gov.homeoffice.json
 
 import java.io.FileNotFoundException
+import org.json4s.JsonAST.{JInt, JNothing}
 import org.json4s.jackson.JsonMethods._
 import org.json4s.{JObject, JString}
 import org.specs2.mutable.Specification
@@ -42,6 +43,19 @@ class JsonSpec extends Specification with Json with JsonFormats {
       json.extract[MyStuff] must beLike[MyStuff] {
         case MyStuff(_, MoreStuff(howMuch)) => howMuch mustEqual 10
       }
+    }
+
+    "not be found" in {
+      val json = parse("""
+      {
+        "id": "Stuff ID",
+        "moreStuff": {
+          "howMuch": 10
+        }
+      }""")
+
+      json \ "not-there" mustEqual JNothing
+      json \ "moreStuff" \ "howMuch" mustEqual JInt(10)
     }
   }
 
