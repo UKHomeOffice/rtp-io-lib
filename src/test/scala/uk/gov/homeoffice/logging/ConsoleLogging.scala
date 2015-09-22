@@ -1,19 +1,18 @@
 package uk.gov.homeoffice.logging
 
 import java.io.{ByteArrayOutputStream, PrintStream}
-import scala.collection.mutable
+import org.specs2.matcher.Scope
 
 trait ConsoleLogging {
-  val outputStreams = mutable.Map[Thread, ByteArrayOutputStream]()
+  this: Scope =>
 
-  def consoleLog = outputStreams(Thread.currentThread()).toString
+  val baos = new ByteArrayOutputStream
+
+  val ps = new PrintStream(baos)
+
+  def consoleLog = baos.toString
 
   def withConsoleRedirect[T](block: => T) = {
-    val baos = new ByteArrayOutputStream
-    outputStreams.update(Thread.currentThread(), baos)
-
-    val ps = new PrintStream(baos)
-
     val sysOutOriginal = System.out
     val sysErrorOriginal = System.err
 
@@ -24,7 +23,6 @@ trait ConsoleLogging {
 
     System.setOut(sysOutOriginal)
     System.setErr(sysErrorOriginal)
-    outputStreams.remove(Thread.currentThread())
 
     result
   }
