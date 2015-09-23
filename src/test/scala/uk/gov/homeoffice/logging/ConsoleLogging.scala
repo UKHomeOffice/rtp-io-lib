@@ -8,17 +8,18 @@ trait ConsoleLogging {
 
   isolated
 
+  type ConsoleLog = () => String
+
   val sysOutOriginal = System.out
   val sysErrorOriginal = System.err
 
-  def withConsoleLog[R](block: (() => String) => R) = {
+  def withConsoleLog[R](block: ConsoleLog => R) = {
     val baos = new ByteArrayOutputStream
+    val consoleLog: ConsoleLog = baos.toString
     val ps = new PrintStream(baos)
 
     System.setOut(ps)
     System.setErr(ps)
-
-    val consoleLog: () => String = baos.toString
 
     val result = block(consoleLog)
 
