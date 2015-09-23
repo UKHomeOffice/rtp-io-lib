@@ -25,7 +25,8 @@ trait Json extends IO {
   }
 
   def asJson(t: Throwable): JValue =
-    ("errorMessage" -> t.getMessage) ~
+    "errorStackTrace" ->
+      ("errorMessage" -> t.getMessage) ~
       ("stackTrace" -> t.getStackTrace.toList.map { st =>
         ("file" -> st.getFileName) ~
           ("class" -> st.getClassName) ~

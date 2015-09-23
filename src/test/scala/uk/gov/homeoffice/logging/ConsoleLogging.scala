@@ -1,30 +1,30 @@
 package uk.gov.homeoffice.logging
 
 import java.io.{ByteArrayOutputStream, PrintStream}
-import scala.collection.mutable
+import org.specs2.mutable.Specification
 
 trait ConsoleLogging {
-  val outputStreams = mutable.Map[Thread, ByteArrayOutputStream]()
+  this: Specification =>
 
-  def consoleLog = outputStreams(Thread.currentThread()).toString
+  isolated
 
-  def withConsoleRedirect[T](block: => T) = {
+  type ConsoleLog = () => String
+
+  val sysOutOriginal = System.out
+  val sysErrorOriginal = System.err
+
+  def withConsoleLog[R](block: ConsoleLog => R) = {
     val baos = new ByteArrayOutputStream
-    outputStreams.update(Thread.currentThread(), baos)
-
+    val consoleLog: ConsoleLog = baos.toString
     val ps = new PrintStream(baos)
-
-    val sysOutOriginal = System.out
-    val sysErrorOriginal = System.err
 
     System.setOut(ps)
     System.setErr(ps)
 
-    val result = block
+    val result = block(consoleLog)
 
     System.setOut(sysOutOriginal)
     System.setErr(sysErrorOriginal)
-    outputStreams.remove(Thread.currentThread())
 
     result
   }
