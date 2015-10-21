@@ -28,8 +28,6 @@ object Build extends Build {
         "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases",
         "Kamon Repository" at "http://repo.kamon.io"),
       libraryDependencies ++= Seq(
-        "org.clapper" %% "grizzled-slf4j" % "1.0.2",
-        "ch.qos.logback" % "logback-classic" % "1.1.3",
         "com.typesafe" % "config" % "1.3.0" withSources(),
         "org.json4s" %% "json4s-native" % "3.2.11" withSources(),
         "org.json4s" %% "json4s-jackson" % "3.2.11" withSources(),
@@ -37,8 +35,12 @@ object Build extends Build {
         "org.json4s" %% "json4s-mongo" % "3.2.11" withSources(),
         "com.github.fge" % "json-schema-validator" % "2.2.6" withSources(),
         "org.scala-lang.modules" %% "scala-pickling" % "0.10.1" withSources(),
-        "com.lihaoyi" %% "pprint" % "0.3.4"),
-      libraryDependencies ++= Seq())
+        "com.lihaoyi" %% "pprint" % "0.3.4",
+        "org.clapper" %% "grizzled-slf4j" % "1.0.2",
+        "ch.qos.logback" % "logback-core" % "1.1.3",
+        "ch.qos.logback" % "logback-classic" % "1.1.3"),
+      libraryDependencies ++= Seq()
+    )
 
   val testPath = "../rtp-test-lib"
 
