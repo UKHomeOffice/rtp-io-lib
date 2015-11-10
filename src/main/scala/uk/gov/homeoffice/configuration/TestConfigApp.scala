@@ -16,5 +16,5 @@ import com.typesafe.config.ConfigFactory
 object TestConfigApp extends App {
   val config = ConfigFactory.load()
 
-  println(config.getString("welcome"))
+//  println(config.getString("welcome"))   - doesnt work so rather silly example App - fix or delete
 }
