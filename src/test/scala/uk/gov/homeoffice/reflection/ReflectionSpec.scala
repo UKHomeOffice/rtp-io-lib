@@ -10,8 +10,7 @@ class ReflectionSpec extends Specification {
     }
 
     "be instantiated by one argument constructor" in {
-      val s: String = instantiate("java.lang.String", "Hello World")
-      s mustEqual "Hello World"
+      instantiate[String]("java.lang.String", "Hello World") mustEqual "Hello World"
     }
   }
 }
