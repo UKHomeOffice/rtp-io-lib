@@ -1,16 +1,7 @@
 package uk.gov.homeoffice.console
 
-trait Console {
-  def present(s: String) = {
-    val border = "***" + ("*" * s.length) + "***"
-    val subBorder = "*" + (" " * (s.length + 4)) + "*"
+import grizzled.slf4j.Logging
 
-    println(
-      s"""$border
-         |$subBorder
-         |*  $s  *
-         |$subBorder
-         |$border
-       """.stripMargin)
-  }
+trait Console extends Logging {
+  val present = (s: String) => info(s"***** $s *****")
 }
