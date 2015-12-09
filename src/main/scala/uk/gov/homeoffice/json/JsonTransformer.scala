@@ -1,7 +1,6 @@
 package uk.gov.homeoffice.json
 
 import scala.util.Try
-import org.json4s.JsonAST.JNothing
 import org.json4s.JsonDSL._
 import org.json4s.{JArray, JObject, JValue, _}
 import org.scalactic.Or
@@ -25,7 +24,6 @@ import grizzled.slf4j.Logging
  * - The newly transformed JSON is added to JSON that accumulates all the transformations.
  * - Upon completion, you should (hopefully) end up with an updated version of the original JSON, now empty, and the new JSON that contains all the transformations.
  */
-
 trait JsonTransformer extends JsonFormats with Logging {
   type FromProperty = String
 
