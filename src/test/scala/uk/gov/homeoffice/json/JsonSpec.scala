@@ -25,6 +25,10 @@ class JsonSpec extends Specification with Json with JsonFormats {
       jsonFromFilepath(path("src/test/resources/test-2.json")) must beSuccessfulTry { JObject("hello" -> JString("world!")) }
     }
 
+    "give its content including applying an adapter" in {
+      jsonFromFilepath(path("src/test/resources/test-2.json"))(_.replaceAll("world", "WORLD")) must beSuccessfulTry { JObject("hello" -> JString("WORLD!")) }
+    }
+
     "not be found" in {
       jsonFromFilepath(path("src/test/resources/blah.json")) must beFailedTry.withThrowable[FileNotFoundException]
     }

@@ -11,17 +11,12 @@ import uk.gov.homeoffice.io.IO
 object Json extends Json
 
 trait Json extends IO {
-  val jsonFromUrlContent: URL => Try[JValue] =
-    url => urlContentToString(url) map { parse(_) }
+  def jsonFromUrlContent(url: URL)(implicit adapt: String => String = s => s): Try[JValue] = urlContentToString(url)(adapt) map { parse(_) }
 
-  val jsonFromClasspath: String => Try[JValue] =
-    classpath => fromClasspath(classpath) flatMap jsonFromUrlContent
+  def jsonFromClasspath(classpath: String)(implicit adapt: String => String = s => s): Try[JValue] = fromClasspath(classpath) flatMap { jsonFromUrlContent(_)(adapt) }
 
-  val jsonFromFilepath: String => Try[JValue] =
-    filepath => Try { parse(Source.fromFile(filepath).getLines().mkString) }
-
-  implicit class JFieldOps(jfield: (String, JValue)) {
-    def merge(json: JValue) = (jfield: JValue) merge json
+  def jsonFromFilepath(filepath: String)(implicit adapt: String => String = s => s): Try[JValue] = Try {
+    parse(adapt(Source.fromFile(filepath).getLines().mkString))
   }
 
   def asJson(t: Throwable): JValue =
@@ -33,4 +28,8 @@ trait Json extends IO {
           ("method" -> st.getMethodName) ~
           ("line" -> st.getLineNumber)
       })
+
+  implicit class JFieldOps(jfield: (String, JValue)) {
+    def merge(json: JValue) = (jfield: JValue) merge json
+  }
 }
