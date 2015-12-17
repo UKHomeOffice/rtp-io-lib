@@ -15,4 +15,15 @@ class RegexSpec extends Specification {
       trailingInt("item_10_") must beNone
     }
   }
+
+  "Regex group" should {
+    "capture the second group" in {
+      val text = """ "registeredTravellerNumber" : "RTW6Y7VNW" """
+
+      val pattern = """.*?"registeredTravellerNumber" : "(.*?)".*?""".r
+      val pattern(value) = text
+
+      value mustEqual "RTW6Y7VNW"
+    }
+  }
 }
