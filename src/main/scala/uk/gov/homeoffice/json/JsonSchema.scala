@@ -2,6 +2,7 @@ package uk.gov.homeoffice.json
 
 import java.net.URL
 import scala.collection.JavaConversions._
+import scala.util.{Failure, Success}
 import org.json4s.JValue
 import org.json4s.JsonAST.JNothing
 import org.json4s.jackson.JsonMethods._
@@ -12,8 +13,9 @@ import com.github.fge.jsonschema.main.JsonSchemaFactory
 import uk.gov.homeoffice.json.JsonSchema.Validator
 
 /**
- * TODO
- * @param validator
+ * JSON Schema that conforms to http://json-schema.org/
+ * Upon given JSON that is a valid JSON schema, this class represents said schema
+ * @param validator Validator with underlying type of com.github.fge.jsonschema.main.JsonSchema
  */
 class JsonSchema(validator: Validator) {
   def validate(json: JValue): JValue Or JsonError = try {
@@ -36,12 +38,15 @@ class JsonSchema(validator: Validator) {
 }
 
 /**
- * TODO
+ * JSON Schema factory
  */
 object JsonSchema extends Json {
   type Validator = com.github.fge.jsonschema.main.JsonSchema
 
-  def apply(schema: URL): JsonSchema = jsonFromUrlContent(schema).map(apply).getOrElse(throw new BadSchemaException(s"Bad JSON schema URL: $schema"))
+  def apply(schema: URL): JsonSchema = jsonFromUrlContent(schema) match {
+    case Success(j) => apply(j)
+    case Failure(t) => throw new BadSchemaException(s"Failed to parse $schema into a JSON schema because: ${t.getMessage}")
+  }
 
   def apply(schema: JValue): JsonSchema = {
     // TODO Not sure I like this "val" followed by "if" - Think validation "options" can be given to the underlying validator, but don't know how.
@@ -53,14 +58,14 @@ object JsonSchema extends Json {
     if (missingRequiredProperties.nonEmpty)
       throw new BadSchemaException(s"Given JSON schema is invalid, missing mandatory fields: ${missingRequiredProperties.mkString(", ")}")
 
-    val jsonSchemaNode = JsonLoader.fromString(compact(render(schema)))
+    val jsonSchemaNode = JsonLoader fromString compact(render(schema))
 
     val validator = {
-      val syntaxValidator = JsonSchemaFactory.byDefault().getSyntaxValidator
-      val processingReport = syntaxValidator.validateSchema(jsonSchemaNode)
+      val syntaxValidator = JsonSchemaFactory byDefault() getSyntaxValidator
+      val processingReport = syntaxValidator validateSchema jsonSchemaNode
 
       if (processingReport.isSuccess)
-        JsonSchemaFactory.byDefault().getJsonSchema(jsonSchemaNode)
+        JsonSchemaFactory byDefault() getJsonSchema jsonSchemaNode
       else
         throw new BadSchemaException(s"Given JSON schema is invalid: $processingReport")
     }

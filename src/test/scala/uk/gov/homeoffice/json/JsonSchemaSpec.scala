@@ -1,11 +1,11 @@
 package uk.gov.homeoffice.json
 
 import java.net.{MalformedURLException, URL}
-import grizzled.slf4j.Logging
 import org.json4s.JsonAST.{JObject, JString}
 import org.json4s.jackson.JsonMethods._
-import org.scalactic.{Good, Bad}
+import org.scalactic.{Bad, Good}
 import org.specs2.mutable.Specification
+import grizzled.slf4j.Logging
 import uk.gov.homeoffice.json.JsonSchema.BadSchemaException
 import uk.gov.homeoffice.json.JsonSchemaSpec._
 
@@ -16,11 +16,15 @@ class JsonSchemaSpec extends Specification with Logging {
     }
 
     "be invalidated when providing a bad schema location" in {
-      JsonSchema(new URL("file:///does-not-exist.json")) must throwA[BadSchemaException](message = "Bad JSON schema URL: file:/does-not-exist.json")
+      JsonSchema(new URL("file:///does-not-exist.json")) must throwA[BadSchemaException].like {
+        case t => t.getMessage mustEqual "Failed to parse file:/does-not-exist.json into a JSON schema because: /does-not-exist.json (No such file or directory)"
+      }
     }
 
     "be invalidated when providing JSON that is not a schema" in {
-      JsonSchema(JObject("bad" -> JString("schema"))) must throwA[BadSchemaException](message = "Given JSON schema is invalid, missing mandatory fields: \\$schema, id, type, properties")
+      JsonSchema(JObject("bad" -> JString("schema"))) must throwA[BadSchemaException].like {
+        case t => t.getMessage mustEqual "Given JSON schema is invalid, missing mandatory fields: $schema, id, type, properties"
+      }
     }
 
     "be invalidated when providing JSON that does not conform to the JSON schema specification" in {
@@ -100,7 +104,7 @@ class JsonSchemaSpec extends Specification with Logging {
         ]
       }""")
 
-      JsonSchema(schema).validate(json) mustEqual Good(json)
+      JsonSchema(schema) validate json mustEqual Good(json)
     }
   }
 }
