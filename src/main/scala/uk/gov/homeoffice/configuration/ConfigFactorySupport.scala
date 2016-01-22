@@ -24,20 +24,16 @@ trait ConfigFactorySupport {
   }
 
   implicit class ConfigOps(config: Config) {
-    def duration(path: String, default: Duration): Duration = {
-      val d = Try {
-        config.getDuration(path)
-      } getOrElse JavaDuration.ofNanos(default.toNanos)
+    val duration = (path: String, default: Duration) => property(path, JavaDuration.ofNanos(default.toNanos), _.getDuration)
 
-      d
-    }
+    val text = (path: String, default: String) => property(path, default, _.getString)
 
-    def int(path: String, default: Int): Int = Try {
-      config.getInt(path)
-    } getOrElse default
+    val int = (path: String, default: Int) => property(path, default, _.getInt)
 
-    def boolean(path: String, default: Boolean): Boolean = Try {
-      config.getBoolean(path)
+    val boolean = (path: String, default: Boolean) => property(path, default, _.getBoolean)
+
+    private def property[P, D](path: P, default: D, f: Config => P => D) = Try {
+      f(config)(path)
     } getOrElse default
   }
 }
