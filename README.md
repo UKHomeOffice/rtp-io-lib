@@ -104,7 +104,7 @@ Alternatively, a JSON schema can be validated from the Scala REPL by doing the f
 
 > import uk.gov.homeoffice.json.Json._
 
-> jsonFromFilepath("../home-office-schemas/src/main/resources/uk-access-code-schema.json") map { JsonSchema(_) }
+> jsonFromFilepath("src/test/resources/schema-test.json") map { JsonSchema(_) }
 
 If you've given a valid file path and the schema is valid, the result will be something like:
 
