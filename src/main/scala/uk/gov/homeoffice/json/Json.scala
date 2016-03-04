@@ -1,7 +1,7 @@
 package uk.gov.homeoffice.json
 
 import java.net.URL
-import scala.io.Source
+import scala.io.{Codec, Source}
 import scala.util.Try
 import org.json4s.JValue
 import org.json4s.JsonDSL._
@@ -11,12 +11,14 @@ import uk.gov.homeoffice.io.IO
 object Json extends Json
 
 trait Json extends IO {
-  def jsonFromUrlContent(url: URL)(implicit adapt: String => String = s => s): Try[JValue] = urlContentToString(url)(adapt) map { parse(_) }
+  def jsonFromUrlContent(url: URL)(implicit adapt: String => String = s => s, encoding: Codec = Codec.UTF8): Try[JValue] =
+    urlContentToString(url)(adapt, encoding) map { parse(_) }
 
-  def jsonFromClasspath(classpath: String)(implicit adapt: String => String = s => s): Try[JValue] = fromClasspath(classpath) flatMap { jsonFromUrlContent(_)(adapt) }
+  def jsonFromClasspath(classpath: String)(implicit adapt: String => String = s => s, encoding: Codec = Codec.UTF8): Try[JValue] =
+    fromClasspath(classpath) flatMap { jsonFromUrlContent(_)(adapt, encoding) }
 
-  def jsonFromFilepath(filepath: String)(implicit adapt: String => String = s => s): Try[JValue] = Try {
-    parse(adapt(Source.fromFile(filepath).getLines().mkString))
+  def jsonFromFilepath(filepath: String)(implicit adapt: String => String = s => s, encoding: Codec = Codec.UTF8): Try[JValue] = Try {
+    parse(adapt(Source.fromFile(filepath)(encoding).getLines().mkString))
   }
 
   def asJson(t: Throwable): JValue =
