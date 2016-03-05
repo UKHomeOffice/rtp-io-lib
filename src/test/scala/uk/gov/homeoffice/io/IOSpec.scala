@@ -19,7 +19,7 @@ class IOSpec extends Specification with IO {
     }
 
     "give its content" in {
-      fromClasspath(path("/test-1.txt")) flatMap urlContentToString must beSuccessfulTry("Hello World!")
+      fromClasspath(path("/test-1.txt")) flatMap { urlContentToString(_) } must beSuccessfulTry("Hello World!")
     }
   }
 
@@ -39,19 +39,13 @@ class IOSpec extends Specification with IO {
     }
 
     "be captured from URL for a requested encoding" in {
-      urlContentToString(resourceURL)(encoding = Codec.ISO8859) must beLike {
+      urlContentToString(resourceURL, Codec.ISO8859) must beLike {
         case Success(content) => content must contain("blah")
       }
     }
 
     "be captured from URL and adapted with requested encoding" in {
-      urlContentToString(resourceURL)(adapt = _.replaceAll("blah", "BLAH"), encoding = Codec.ISO8859) must beLike {
-        case Success(content) => content must contain("BLAH")
-      }
-    }
-
-    "be captured from URL for a requested encoding and adapted" in {
-      urlContentToString(resourceURL)(encoding = Codec.ISO8859, adapt = _.replaceAll("blah", "BLAH")) must beLike {
+      urlContentToString(resourceURL, Codec.ISO8859)(adapt = _.replaceAll("blah", "BLAH")) must beLike {
         case Success(content) => content must contain("BLAH")
       }
     }

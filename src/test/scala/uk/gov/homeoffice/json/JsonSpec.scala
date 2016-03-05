@@ -30,19 +30,13 @@ class JsonSpec extends Specification with Json with JsonFormats {
     }
 
     "be captured from class path for a requested encoding" in {
-      jsonFromClasspath(resourceClasspath)(encoding = Codec.ISO8859) must beLike {
+      jsonFromClasspath(resourceClasspath, Codec.ISO8859) must beLike {
         case Success(content) => content \ "blah" mustEqual JString("whatever")
       }
     }
 
     "be captured from class path and adapted with requested encoding" in {
-      jsonFromClasspath(resourceClasspath)(adapt = _.replaceAll("whatever", "WHATEVER"), encoding = Codec.ISO8859) must beLike {
-        case Success(content) => content \ "blah" mustEqual JString("WHATEVER")
-      }
-    }
-
-    "be captured from class path for a requested encoding and adapted" in {
-      jsonFromClasspath(resourceClasspath)(encoding = Codec.ISO8859, adapt = _.replaceAll("whatever", "WHATEVER")) must beLike {
+      jsonFromClasspath(resourceClasspath, Codec.ISO8859)(adapt = _.replaceAll("whatever", "WHATEVER")) must beLike {
         case Success(content) => content \ "blah" mustEqual JString("WHATEVER")
       }
     }
@@ -50,7 +44,7 @@ class JsonSpec extends Specification with Json with JsonFormats {
 
   "URL JSON resource" should {
     "give its content" in {
-      fromClasspath(path("/test-2.json")) flatMap jsonFromUrlContent must beSuccessfulTry { JObject("hello" -> JString("world!")) }
+      fromClasspath(path("/test-2.json")) flatMap { jsonFromUrlContent(_) } must beSuccessfulTry { JObject("hello" -> JString("world!")) }
     }
 
     val resourceURL = new File("src/test/resources/test.json").toURI.toURL
@@ -68,19 +62,13 @@ class JsonSpec extends Specification with Json with JsonFormats {
     }
 
     "be captured from URL for a requested encoding" in {
-      jsonFromUrlContent(resourceURL)(encoding = Codec.ISO8859) must beLike {
+      jsonFromUrlContent(resourceURL, Codec.ISO8859) must beLike {
         case Success(content) => content \ "blah" mustEqual JString("whatever")
       }
     }
 
     "be captured from URL and adapted with requested encoding" in {
-      jsonFromUrlContent(resourceURL)(adapt = _.replaceAll("whatever", "WHATEVER"), encoding = Codec.ISO8859) must beLike {
-        case Success(content) => content \ "blah" mustEqual JString("WHATEVER")
-      }
-    }
-
-    "be captured from URL for a requested encoding and adapted" in {
-      jsonFromUrlContent(resourceURL)(encoding = Codec.ISO8859, adapt = _.replaceAll("whatever", "WHATEVER")) must beLike {
+      jsonFromUrlContent(resourceURL, Codec.ISO8859)(adapt = _.replaceAll("whatever", "WHATEVER")) must beLike {
         case Success(content) => content \ "blah" mustEqual JString("WHATEVER")
       }
     }
@@ -114,19 +102,13 @@ class JsonSpec extends Specification with Json with JsonFormats {
     }
 
     "be captured from file path for a requested encoding" in {
-      jsonFromFilepath(resourceFilepath)(encoding = Codec.ISO8859) must beLike {
+      jsonFromFilepath(resourceFilepath, Codec.ISO8859) must beLike {
         case Success(content) => content \ "blah" mustEqual JString("whatever")
       }
     }
 
     "be captured from file path and adapted with requested encoding" in {
-      jsonFromFilepath(resourceFilepath)(adapt = _.replaceAll("whatever", "WHATEVER"), encoding = Codec.ISO8859) must beLike {
-        case Success(content) => content \ "blah" mustEqual JString("WHATEVER")
-      }
-    }
-
-    "be captured from file path for a requested encoding and adapted" in {
-      jsonFromFilepath(resourceFilepath)(encoding = Codec.ISO8859, adapt = _.replaceAll("whatever", "WHATEVER")) must beLike {
+      jsonFromFilepath(resourceFilepath, Codec.ISO8859)(adapt = _.replaceAll("whatever", "WHATEVER")) must beLike {
         case Success(content) => content \ "blah" mustEqual JString("WHATEVER")
       }
     }

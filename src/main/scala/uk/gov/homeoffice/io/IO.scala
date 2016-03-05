@@ -6,9 +6,23 @@ import scala.io.Codec
 import scala.io.Source._
 import scala.util.{Success, Failure, Try}
 
+/**
+  * Read resource
+  */
 trait IO {
+  /**
+    * Acquire resource as input stream from class path
+    * @param classpath of required resource
+    * @return InputStream to required resource
+    */
   def classpathResource(classpath: String): InputStream = getClass.getResourceAsStream(classpath)
 
+  /**
+    * Acquire resource as URL from class path e.g.
+    * fromClasspath(path("/test.txt"))
+    * @param classpath String of class path to required resource
+    * @return Try[URL] Success of URL when found or Failure of IOException
+    */
   def fromClasspath(classpath: String): Try[URL] = Try {
     getClass.getResource(classpath)
   } flatMap { url =>
@@ -16,7 +30,17 @@ trait IO {
     else Success(url)
   }
 
-  def urlContentToString(url: URL)(implicit adapt: String => String = s => s, encoding: Codec = Codec.UTF8): Try[String] = Try { adapt(fromURL(url)(encoding).getLines().mkString) }
+  /**
+    * Acquire content as String of a given URL and optional encoding e.g.
+    * fromClasspath(path("/test.txt"))
+    * @param url URL of required resource
+    * @param encoding Codec that defaults to UTF-8
+    * @param adapt Optional function to adapt the content
+    * @return Try[String] Success of String when content has been read (and optionally adapted) or Failure
+    */
+  def urlContentToString(url: URL, encoding: Codec = Codec.UTF8)(implicit adapt: String => String = s => s): Try[String] = Try {
+    adapt(fromURL(url)(encoding).getLines().mkString)
+  }
 
   /**
     * Makes sure that a given string representing a file path is operating system agnostic.
