@@ -1,7 +1,8 @@
 package uk.gov.homeoffice.io
 
-import java.io.IOException
+import java.io.{File, IOException}
 import java.net.URL
+import scala.io.Codec
 import scala.util.Success
 import org.specs2.mutable.Specification
 
@@ -18,7 +19,35 @@ class IOSpec extends Specification with IO {
     }
 
     "give its content" in {
-      fromClasspath(path("/test-1.txt")) flatMap urlContentToString must beSuccessfulTry("Hello World!")
+      fromClasspath(path("/test-1.txt")) flatMap { urlContentToString(_) } must beSuccessfulTry("Hello World!")
+    }
+  }
+
+  "Resource content" should {
+    val resourceURL = new File("src/test/resources/test.json").toURI.toURL
+
+    "be captured from URL" in {
+      urlContentToString(resourceURL) must beLike {
+        case Success(content) => content must contain("blah")
+      }
+    }
+
+    "be captured from URL and adapted" in {
+      urlContentToString(resourceURL)(_.replaceAll("blah", "BLAH")) must beLike {
+        case Success(content) => content must contain("BLAH")
+      }
+    }
+
+    "be captured from URL for a requested encoding" in {
+      urlContentToString(resourceURL, Codec.ISO8859) must beLike {
+        case Success(content) => content must contain("blah")
+      }
+    }
+
+    "be captured from URL and adapted with requested encoding" in {
+      urlContentToString(resourceURL, Codec.ISO8859)(adapt = _.replaceAll("blah", "BLAH")) must beLike {
+        case Success(content) => content must contain("BLAH")
+      }
     }
   }
 }
