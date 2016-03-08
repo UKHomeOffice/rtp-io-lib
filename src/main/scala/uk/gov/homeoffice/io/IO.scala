@@ -1,6 +1,6 @@
 package uk.gov.homeoffice.io
 
-import java.io.{InputStream, IOException, File}
+import java.io.{FileNotFoundException, InputStream, IOException, File}
 import java.net.URL
 import scala.io.Codec
 import scala.io.Source._
@@ -10,20 +10,27 @@ import scala.util.{Success, Failure, Try}
   * Read resource
   */
 trait IO {
+
   /**
     * Acquire resource as input stream from class path
     * @param classpath of required resource
+    * @throws FileNotFoundException when file is not found
     * @return InputStream to required resource
     */
-  def classpathResource(classpath: String): InputStream = getClass.getResourceAsStream(classpath)
+  def streamFromClasspath(classpath: String): InputStream = {
+    val stream = getClass.getResourceAsStream(classpath)
+    if (stream == null) throw new FileNotFoundException(s"Could not load resource from $classpath")
+    else stream
+  }
 
   /**
     * Acquire resource as URL from class path e.g.
     * fromClasspath(path("/test.txt"))
+ *
     * @param classpath String of class path to required resource
     * @return Try[URL] Success of URL when found or Failure of IOException
     */
-  def fromClasspath(classpath: String): Try[URL] = Try {
+  def urlFromClasspath(classpath: String): Try[URL] = Try {
     getClass.getResource(classpath)
   } flatMap { url =>
     if (url == null) Failure(new IOException("Resource not found"))

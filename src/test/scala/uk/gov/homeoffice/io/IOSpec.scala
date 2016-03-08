@@ -1,25 +1,37 @@
 package uk.gov.homeoffice.io
 
-import java.io.{File, IOException}
+import java.io.{FileNotFoundException, File, IOException}
 import java.net.URL
 import scala.io.Codec
+import scala.io.Source.fromInputStream
 import scala.util.Success
 import org.specs2.mutable.Specification
 
 class IOSpec extends Specification with IO {
-  "Classpath resource" should {
+
+  "Stream from classpath" should {
+    "throw an exception when the file is not found" in {
+      streamFromClasspath(path("/blah.txt")) must throwA[FileNotFoundException]("Could not load resource from /blah.txt")
+    }
+
+    "give its content" in {
+      fromInputStream(streamFromClasspath(path("/test-1.txt"))).mkString mustEqual "Hello World!"
+    }
+  }
+
+  "URL from classpath" should {
     "be found from a given string representing the path" in {
-      fromClasspath(path("/test-1.txt")) must beLike {
+      urlFromClasspath(path("/test-1.txt")) must beLike {
         case Success(u: URL) => u.getFile must endWith(path("test-classes/test-1.txt"))
       }
     }
 
     "not be found from a given string representing the path" in {
-      fromClasspath(path("/blah.txt")) must beFailedTry.withThrowable[IOException]
+      urlFromClasspath(path("/blah.txt")) must beFailedTry.withThrowable[IOException]
     }
 
     "give its content" in {
-      fromClasspath(path("/test-1.txt")) flatMap { urlContentToString(_) } must beSuccessfulTry("Hello World!")
+      urlFromClasspath(path("/test-1.txt")) flatMap { urlContentToString(_) } must beSuccessfulTry("Hello World!")
     }
   }
 

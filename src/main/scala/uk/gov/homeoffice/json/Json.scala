@@ -37,7 +37,7 @@ trait Json extends IO {
     * @return Try[JValue] Success of JValue or Failure
     */
   def jsonFromClasspath(classpath: String, encoding: Codec = Codec.UTF8)(implicit adapt: String => String = s => s): Try[JValue] =
-    fromClasspath(classpath) flatMap { jsonFromUrlContent(_, encoding)(adapt) }
+    urlFromClasspath(classpath) flatMap { jsonFromUrlContent(_, encoding)(adapt) }
 
   /**
     * Acquire JSON from file path e.g.

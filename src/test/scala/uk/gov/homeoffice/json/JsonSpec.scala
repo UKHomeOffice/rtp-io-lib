@@ -44,7 +44,7 @@ class JsonSpec extends Specification with Json with JsonFormats {
 
   "URL JSON resource" should {
     "give its content" in {
-      fromClasspath(path("/test-2.json")) flatMap { jsonFromUrlContent(_) } must beSuccessfulTry { JObject("hello" -> JString("world!")) }
+      urlFromClasspath(path("/test-2.json")) flatMap { jsonFromUrlContent(_) } must beSuccessfulTry { JObject("hello" -> JString("world!")) }
     }
 
     val resourceURL = new File("src/test/resources/test.json").toURI.toURL
