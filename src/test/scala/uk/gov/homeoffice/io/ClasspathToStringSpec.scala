@@ -1,17 +1,26 @@
 package uk.gov.homeoffice.io
 
-import java.io.FileNotFoundException
+import java.io.IOException
+import scala.io.Codec
 import scala.util.Success
 import org.specs2.mutable.Specification
 
-class ClasspathResourceToStringSpec extends Specification {
+class ClasspathToStringSpec extends Specification {
   "Classpath resource" should {
     "fail to be read" in {
-      Resource(Classpath("/non-existing.json")).to[String] must beFailedTry.withThrowable[FileNotFoundException]
+      Resource(Classpath("/non-existing.json")).to[String] must beFailedTry.withThrowable[IOException]
     }
 
     "give a string from root of classpath" in {
       Resource(Classpath("/test.json")).to[String] mustEqual Success {
+        """{
+          |    "blah": "whatever"
+          |}""".stripMargin
+      }
+    }
+
+    "give a string from root of classpath for a specified encoding" in {
+      Resource(Classpath("/test.json"), Codec.ISO8859).to[String] mustEqual Success {
         """{
           |    "blah": "whatever"
           |}""".stripMargin

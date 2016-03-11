@@ -1,14 +1,14 @@
 package uk.gov.homeoffice.io
 
-import java.io.{FileNotFoundException, InputStream}
+import java.io.{IOException, InputStream}
 import scala.io.Source.fromInputStream
 import scala.util.{Success, Try}
 import org.specs2.mutable.Specification
 
-class ClasspathResourceToInputStreamSpec extends Specification {
+class ClasspathToInputStreamSpec extends Specification {
   "Classpath resource" should {
     "fail to be read" in {
-      Resource(Classpath("/non-existing.json")).to[InputStream] must beFailedTry.withThrowable[FileNotFoundException]
+      Resource(Classpath("/non-existing.json")).to[InputStream] must beFailedTry.withThrowable[IOException]
     }
 
     "give an input stream from root of classpath" in {
