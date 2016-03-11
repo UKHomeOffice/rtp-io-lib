@@ -10,8 +10,6 @@ import scala.util.{Success, Failure, Try}
   * Read resource
   */
 trait IO {
-  //def classpathResource(classpath: String) =
-
   /**
     * Acquire resource as input stream from class path
     * @param classpath of required resource
