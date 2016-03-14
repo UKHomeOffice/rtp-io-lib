@@ -10,13 +10,13 @@ import scala.util.{Success, Failure, Try}
   * Read resource
   */
 trait IO {
-
   /**
     * Acquire resource as input stream from class path
     * @param classpath of required resource
     * @throws FileNotFoundException when file is not found
     * @return InputStream to required resource
     */
+  @deprecated(message = "Use uk.gov.homeoffice.io.Resource", since = "11th March 2016")
   def streamFromClasspath(classpath: String): InputStream = {
     val stream = getClass.getResourceAsStream(classpath)
     if (stream == null) throw new FileNotFoundException(s"Could not load resource from $classpath")
@@ -26,10 +26,10 @@ trait IO {
   /**
     * Acquire resource as URL from class path e.g.
     * fromClasspath(path("/test.txt"))
- *
     * @param classpath String of class path to required resource
     * @return Try[URL] Success of URL when found or Failure of IOException
     */
+  @deprecated(message = "Use uk.gov.homeoffice.io.Resource", since = "11th March 2016")
   def urlFromClasspath(classpath: String): Try[URL] = Try {
     getClass.getResource(classpath)
   } flatMap { url =>
@@ -45,6 +45,7 @@ trait IO {
     * @param adapt Optional function to adapt the content
     * @return Try[String] Success of String when content has been read (and optionally adapted) or Failure
     */
+  @deprecated(message = "Use uk.gov.homeoffice.io.Resource", since = "11th March 2016")
   def urlContentToString(url: URL, encoding: Codec = Codec.UTF8)(implicit adapt: String => String = s => s): Try[String] = Try {
     adapt(fromURL(url)(encoding).getLines().mkString)
   }

@@ -25,6 +25,7 @@ trait Json extends IO {
     * @param adapt Optional function to adapt the content - Note that it is the String that is read in, that is adapted before generating JSON
     * @return Try[JValue] Success of JValue or Failure
     */
+  @deprecated(message = "Use uk.gov.homeoffice.io.Resource", since = "11th March 2016")
   def jsonFromUrlContent(url: URL, encoding: Codec = Codec.UTF8)(implicit adapt: String => String = s => s): Try[JValue] =
     urlContentToString(url, encoding)(adapt) map { parse(_) }
 
@@ -36,6 +37,7 @@ trait Json extends IO {
     * @param adapt Optional function to adapt the content - Note that it is the String that is read in, that is adapted before generating JSON
     * @return Try[JValue] Success of JValue or Failure
     */
+  @deprecated(message = "Use uk.gov.homeoffice.io.Resource", since = "11th March 2016")
   def jsonFromClasspath(classpath: String, encoding: Codec = Codec.UTF8)(implicit adapt: String => String = s => s): Try[JValue] =
     urlFromClasspath(classpath) flatMap { jsonFromUrlContent(_, encoding)(adapt) }
 
@@ -47,6 +49,7 @@ trait Json extends IO {
     * @param adapt Optional function to adapt the content - Note that it is the String that is read in, that is adapted before generating JSON
     * @return Try[JValue] Success of JValue or Failure
     */
+  @deprecated(message = "Use uk.gov.homeoffice.io.Resource", since = "11th March 2016")
   def jsonFromFilepath(filepath: String, encoding: Codec = Codec.UTF8)(implicit adapt: String => String = s => s): Try[JValue] = Try {
     parse(adapt(Source.fromFile(filepath)(encoding).getLines().mkString))
   }
