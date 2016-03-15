@@ -9,10 +9,6 @@ import org.specs2.mutable.Specification
 
 class FileToJValueSpec extends Specification {
   "File resource" should {
-    "fail to be read" in {
-      Resource(new File("src/test/resources/non-existing.json")).to[JValue] must beFailedTry.withThrowable[IOException]
-    }
-
     "give JSON" in {
       Resource(new File("src/test/resources/test.json")).to[JValue] mustEqual Success {
         "blah" -> "whatever": JValue
@@ -21,6 +17,18 @@ class FileToJValueSpec extends Specification {
 
     "give JSON for a specified encoding" in {
       Resource(new File("src/test/resources/test.json"), Codec.ISO8859).to[JValue] mustEqual Success {
+        "blah" -> "whatever": JValue
+      }
+    }
+  }
+
+  "File" should {
+    "fail to be read" in {
+      new File("src/test/resources/non-existing.json").to[JValue] must beFailedTry.withThrowable[IOException]
+    }
+
+    "give JSON" in {
+      new File("src/test/resources/test.json").to[JValue] mustEqual Success {
         "blah" -> "whatever": JValue
       }
     }

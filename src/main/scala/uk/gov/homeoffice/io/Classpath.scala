@@ -17,4 +17,7 @@ object Classpath {
   /** Implicitly convert a Classpath to a String - Use this as the path of a Classpath is private and not accessible by all other client code. */
   implicit val classpath2String: Classpath => String =
     cp => path(cp.path)
+
+  implicit val classpath2Resource: Classpath => Resource[Classpath] =
+    cp => Resource(cp)
 }

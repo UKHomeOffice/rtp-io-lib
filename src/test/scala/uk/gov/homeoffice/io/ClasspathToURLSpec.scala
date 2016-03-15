@@ -8,10 +8,6 @@ import org.specs2.mutable.Specification
 
 class ClasspathToURLSpec extends Specification {
   "Classpath resource" should {
-    "fail to be read" in {
-      Resource(Classpath("/non-existing.json")).to[URL] must beFailedTry.withThrowable[IOException]
-    }
-
     "give a URL from root of classpath" in {
       Resource(Classpath("/test.json")).to[URL] must beLike[Try[URL]] {
         case Success(url) => fromURL(url).mkString mustEqual
@@ -20,9 +16,24 @@ class ClasspathToURLSpec extends Specification {
             |}""".stripMargin
       }
     }
+  }
+
+  "Classpath" should {
+    "fail to be read" in {
+      Classpath("/non-existing.json").to[URL] must beFailedTry.withThrowable[IOException]
+    }
+
+    "give a URL from root of classpath" in {
+      Classpath("/test.json").to[URL] must beLike[Try[URL]] {
+        case Success(url) => fromURL(url).mkString mustEqual
+          """{
+            |    "blah": "whatever"
+            |}""".stripMargin
+      }
+    }
 
     "give a URL from root of classpath even when not providing the mandatory / at the start of the path" in {
-      Resource(Classpath("test.json")).to[URL] must beLike[Try[URL]] {
+      Classpath("test.json").to[URL] must beLike[Try[URL]] {
         case Success(url) => fromURL(url).mkString mustEqual
           """{
             |    "blah": "whatever"
@@ -31,7 +42,7 @@ class ClasspathToURLSpec extends Specification {
     }
 
     "give a URL from classpath of /'s" in {
-      Resource(Classpath("/subfolder/test.json")).to[URL] must beLike[Try[URL]] {
+      Classpath("/subfolder/test.json").to[URL] must beLike[Try[URL]] {
         case Success(url) => fromURL(url).mkString mustEqual
           """{
             |    "blah": "whatever"
@@ -40,7 +51,7 @@ class ClasspathToURLSpec extends Specification {
     }
 
     "give a URL from classpath of /'s even when not providing the mandatory / at the start of the path" in {
-      Resource(Classpath("subfolder/test.json")).to[URL] must beLike[Try[URL]] {
+      Classpath("subfolder/test.json").to[URL] must beLike[Try[URL]] {
         case Success(url) => fromURL(url).mkString mustEqual
           """{
             |    "blah": "whatever"

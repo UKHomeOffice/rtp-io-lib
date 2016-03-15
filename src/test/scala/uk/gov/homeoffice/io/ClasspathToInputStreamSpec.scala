@@ -7,10 +7,6 @@ import org.specs2.mutable.Specification
 
 class ClasspathToInputStreamSpec extends Specification {
   "Classpath resource" should {
-    "fail to be read" in {
-      Resource(Classpath("/non-existing.json")).to[InputStream] must beFailedTry.withThrowable[IOException]
-    }
-
     "give an input stream from root of classpath" in {
       Resource(Classpath("/test.json")).to[InputStream] must beLike[Try[InputStream]] {
         case Success(inputStream) => fromInputStream(inputStream).mkString mustEqual
@@ -19,9 +15,26 @@ class ClasspathToInputStreamSpec extends Specification {
             |}""".stripMargin
       }
     }
+  }
+
+  "Classpath" should {
+    "fail to be read" in {
+      Classpath("/non-existing.json").to[InputStream] must beFailedTry.withThrowable[IOException]
+    }
+
+    "give an input stream from root of classpath" in {
+      Classpath("/test.json").to[InputStream] must beLike[Try[InputStream]] {
+        case Success(inputStream) => fromInputStream(inputStream).mkString mustEqual
+          """{
+            |    "blah": "whatever"
+            |}""".stripMargin
+      }
+    }
+
+    // TODO Loan pattern
 
     "give an input stream from root of classpath even when not providing the mandatory / at the start of the path" in {
-      Resource(Classpath("test.json")).to[InputStream] must beLike[Try[InputStream]] {
+      Classpath("test.json").to[InputStream] must beLike[Try[InputStream]] {
         case Success(inputStream) => fromInputStream(inputStream).mkString mustEqual
           """{
             |    "blah": "whatever"
@@ -30,7 +43,7 @@ class ClasspathToInputStreamSpec extends Specification {
     }
 
     "give an input stream from classpath of /'s" in {
-      Resource(Classpath("/subfolder/test.json")).to[InputStream] must beLike[Try[InputStream]] {
+      Classpath("/subfolder/test.json").to[InputStream] must beLike[Try[InputStream]] {
         case Success(inputStream) => fromInputStream(inputStream).mkString mustEqual
           """{
             |    "blah": "whatever"
@@ -39,7 +52,7 @@ class ClasspathToInputStreamSpec extends Specification {
     }
 
     "give an input stream from classpath of /'s even when not providing the mandatory / at the start of the path" in {
-      Resource(Classpath("subfolder/test.json")).to[InputStream] must beLike[Try[InputStream]] {
+      Classpath("subfolder/test.json").to[InputStream] must beLike[Try[InputStream]] {
         case Success(inputStream) => fromInputStream(inputStream).mkString mustEqual
           """{
             |    "blah": "whatever"

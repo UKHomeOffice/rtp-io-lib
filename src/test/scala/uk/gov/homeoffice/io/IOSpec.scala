@@ -8,7 +8,6 @@ import scala.util.Success
 import org.specs2.mutable.Specification
 
 class IOSpec extends Specification with IO {
-
   "Stream from classpath" should {
     "throw an exception when the file is not found" in {
       streamFromClasspath(path("/blah.txt")) must throwA[FileNotFoundException]("Could not load resource from /blah.txt")
