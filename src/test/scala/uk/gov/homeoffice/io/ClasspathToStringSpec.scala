@@ -2,7 +2,7 @@ package uk.gov.homeoffice.io
 
 import java.io.IOException
 import scala.io.Codec
-import scala.util.Success
+import scala.util.{Failure, Success}
 import org.specs2.mutable.Specification
 
 class ClasspathToStringSpec extends Specification {
@@ -26,7 +26,9 @@ class ClasspathToStringSpec extends Specification {
 
   "Classpath" should {
     "fail to be read" in {
-      Classpath("/non-existing.json").to[String] must beFailedTry.withThrowable[IOException]
+      Classpath("/non-existing.json").to[String] must beLike {
+        case Failure(e: IOException) => e.getMessage mustEqual "Could not read resource for given: Classpath(/non-existing.json)"
+      }
     }
 
     "give a string from root of classpath" in {

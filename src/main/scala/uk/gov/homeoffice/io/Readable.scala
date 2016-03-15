@@ -31,14 +31,27 @@ trait Readable[R, T] {
   */
 object Readable {
   /**
+    * Example usage:
+    * override def read(cp: Classpath)(implicit encoding: Codec): Try[InputStream] = manage(getClass.getResourceAsStream(cp)) recoverWith {
+    *   case t: Throwable => Failure(new IOException(s"Could not read resource for given: $cp"))
+    * }
+    */
+  def manage[R <: { def close(): Unit }, T](closeable: => R)(implicit read: R => T): Try[T] = Try(closeable) map { resource =>
+    try read(resource)
+    finally resource.close()
+  } recoverWith {
+    case t: Throwable => Failure(new IOException("Could not read resource", t))
+  }
+
+  /**
     * Read in Classpath Resource -> String
     */
   implicit object ClasspathToString extends Readable[Classpath, String] {
-    override def read(cp: Classpath)(implicit encoding: Codec): Try[String] = Try {
-      val inputStream = getClass.getResourceAsStream(cp)
-      fromInputStream(inputStream).mkString
+    override def read(cp: Classpath)(implicit encoding: Codec): Try[String] = Try(getClass.getResourceAsStream(cp)) map { inputStream =>
+      try fromInputStream(inputStream).mkString
+      finally inputStream.close()
     } recoverWith {
-      case _: NullPointerException => Failure(new IOException(s"Could not read resource for given: $cp"))
+      case t: Throwable => Failure(new IOException(s"Could not read resource for given: $cp", t))
     }
   }
 
@@ -61,7 +74,7 @@ object Readable {
     override def read(cp: Classpath)(implicit encoding: Codec): Try[URL] = Try {
       getClass.getResource(cp)
     } flatMap { url =>
-      if (url == null) Failure(new IOException("Resource not found"))
+      if (url == null) Failure(new IOException(s"Could not read resource for given: $cp"))
       else Success(url)
     }
   }
@@ -78,8 +91,11 @@ object Readable {
     * Read in URL Resource -> String
     */
   implicit object URLToString extends Readable[URL, String] {
-    override def read(u: URL)(implicit encoding: Codec): Try[String] = Try {
-      fromURL(u).mkString
+    override def read(u: URL)(implicit encoding: Codec): Try[String] = Try(fromURL(u)) map { resource =>
+      try resource.mkString
+      finally resource.close()
+    } recoverWith {
+      case t: Throwable => Failure(new IOException(s"Could not read URL for given: $u", t))
     }
   }
 
@@ -95,8 +111,11 @@ object Readable {
     * Read in File Resource -> JValue
     */
   implicit object FileToJValue extends Readable[File, JValue] {
-    override def read(f: File)(implicit encoding: Codec): Try[JValue] = Try {
-      parse(fromFile(f).mkString)
+    override def read(f: File)(implicit encoding: Codec): Try[JValue] = Try(fromFile(f)) map { resource =>
+      try parse(resource.mkString)
+      finally resource.close()
+    } recoverWith {
+      case t: Throwable => Failure(new IOException(s"Could not read file for given: $f", t))
     }
   }
 }

@@ -3,7 +3,7 @@ package uk.gov.homeoffice.io
 import java.io.IOException
 import java.net.URL
 import scala.io.Source.fromURL
-import scala.util.{Success, Try}
+import scala.util.{Failure, Success, Try}
 import org.specs2.mutable.Specification
 
 class ClasspathToURLSpec extends Specification {
@@ -20,7 +20,9 @@ class ClasspathToURLSpec extends Specification {
 
   "Classpath" should {
     "fail to be read" in {
-      Classpath("/non-existing.json").to[URL] must beFailedTry.withThrowable[IOException]
+      Classpath("/non-existing.json").to[URL] must beLike {
+        case Failure(e: IOException) => e.getMessage mustEqual "Could not read resource for given: Classpath(/non-existing.json)"
+      }
     }
 
     "give a URL from root of classpath" in {

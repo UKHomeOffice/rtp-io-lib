@@ -2,7 +2,7 @@ package uk.gov.homeoffice.io
 
 import java.io.{File, IOException}
 import scala.io.Codec
-import scala.util.Success
+import scala.util.{Failure, Success}
 import org.json4s.JValue
 import org.json4s.JsonDSL._
 import org.specs2.mutable.Specification
@@ -24,7 +24,9 @@ class FileToJValueSpec extends Specification {
 
   "File" should {
     "fail to be read" in {
-      new File("src/test/resources/non-existing.json").to[JValue] must beFailedTry.withThrowable[IOException]
+      new File("src/test/resources/non-existing.json").to[JValue] must beLike {
+        case Failure(e: IOException) => e.getMessage mustEqual "Could not read file for given: src/test/resources/non-existing.json"
+      }
     }
 
     "give JSON" in {

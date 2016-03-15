@@ -1,7 +1,7 @@
 package uk.gov.homeoffice.io
 
 import java.io.IOException
-import scala.util.Success
+import scala.util.{Failure, Success}
 import org.json4s.JValue
 import org.json4s.JsonDSL._
 import org.specs2.mutable.Specification
@@ -17,7 +17,9 @@ class ClasspathToJValueSpec extends Specification {
 
   "Classpath" should {
     "fail to be read" in {
-      Classpath("/non-existing.json").to[JValue] must beFailedTry.withThrowable[IOException]
+      Classpath("/non-existing.json").to[JValue] must beLike {
+        case Failure(e: IOException) => e.getMessage mustEqual "Could not read resource for given: Classpath(/non-existing.json)"
+      }
     }
 
     "give JSON from root of classpath" in {
