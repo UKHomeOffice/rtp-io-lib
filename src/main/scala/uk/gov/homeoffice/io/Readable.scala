@@ -33,7 +33,7 @@ object Readable {
   /**
     * Example usage:
     * override def read(cp: Classpath)(implicit encoding: Codec): Try[InputStream] = manage(getClass.getResourceAsStream(cp)) recoverWith {
-    *   case t: Throwable => Failure(new IOException(s"Could not read resource for given: $cp"))
+    *   case t: Throwable => Failure(new IOException("Could not read resource"))
     * }
     */
   def manage[R <: { def close(): Unit }, T](closeable: => R)(implicit read: R => T): Try[T] = Try(closeable) map { resource =>

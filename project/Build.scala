@@ -47,7 +47,7 @@ object Build extends Build {
         "org.clapper" %% "grizzled-slf4j" % "1.0.2",
         "ch.qos.logback" % "logback-core" % `logback-version`,
         "ch.qos.logback" % "logback-classic" % `logback-version`,
-        "uk.gov.homeoffice" %% "rtp-test-lib" % "1.0" withSources()
+        "uk.gov.homeoffice" %% "rtp-test-lib" % `rtp-test-lib-version` withSources()
       ) ++ Seq(
         "uk.gov.homeoffice" %% "rtp-test-lib" % `rtp-test-lib-version` % Test classifier "tests" withSources()
       )
