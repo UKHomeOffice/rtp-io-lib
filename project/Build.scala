@@ -10,7 +10,7 @@ object Build extends Build {
     .settings(
       name := moduleName,
       organization := "uk.gov.homeoffice",
-      version := "1.7.0",
+      version := "1.7.1",
       scalaVersion := "2.11.8",
       scalacOptions ++= Seq(
         "-feature",
@@ -31,9 +31,9 @@ object Build extends Build {
       )
     )
     .settings(libraryDependencies ++= {
-      val `json4s-version` = "3.2.11"
-      val `logback-version` = "1.1.3"
-      val `rtp-test-lib-version` = "1.2.0"
+      val `json4s-version` = "3.3.0"
+      val `logback-version` = "1.1.6"
+      val `rtp-test-lib-version` = "1.2.1"
 
       Seq(
         "com.typesafe" % "config" % "1.3.0" withSources(),
