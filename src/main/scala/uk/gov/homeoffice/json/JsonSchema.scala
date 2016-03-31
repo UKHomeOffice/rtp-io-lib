@@ -15,7 +15,8 @@ import uk.gov.homeoffice.json.JsonSchema.Validator
 /**
  * JSON Schema that conforms to http://json-schema.org/
  * Upon given JSON that is a valid JSON schema, this class represents said schema
- * @param validator Validator with underlying type of com.github.fge.jsonschema.main.JsonSchema
+  *
+  * @param validator Validator with underlying type of com.github.fge.jsonschema.main.JsonSchema
  */
 class JsonSchema(validator: Validator) {
   def validate(json: JValue): JValue Or JsonError = try {
@@ -75,3 +76,8 @@ object JsonSchema extends Json {
 
   class BadSchemaException(message: String) extends Exception(message)
 }
+
+/**
+  * Even though JSON should always be validated against an associated schema, there could still be a good reason to allow any JSON, hence this schema with no rules (empty) can be used.
+  */
+object EmptyJsonSchema extends JsonSchema(JsonSchemaFactory byDefault() getJsonSchema JsonLoader.fromString("{}"))

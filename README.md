@@ -90,6 +90,8 @@ Example Usage
   transform(flatJson) mustEqual Good(json) 
 ```
 
+Note - if required (though not advised) the EmptyJsonSchema can be used to all JSON to be validated successfully.
+
 JSON Schema Validation
 ----------------------
 There are several online JSON schema validation tools such as [JSON Schema Validator](http://www.jsonschemavalidator.net/)

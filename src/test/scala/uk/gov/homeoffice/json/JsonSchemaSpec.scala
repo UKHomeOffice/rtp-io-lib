@@ -74,6 +74,15 @@ class JsonSchemaSpec extends Specification with Logging {
   }
 
   "JSON" should {
+    "always be validated against an empty JSON schema" in {
+      val whateverJson = parse("""
+      {
+        "blah": "blah"
+      }""")
+
+      EmptyJsonSchema.validate(whateverJson) mustEqual Good(whateverJson)
+    }
+
     "highlight errors when failing to validate against schema" in {
       val json = parse("""
       {
