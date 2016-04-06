@@ -19,11 +19,17 @@ object Json extends Json
   */
 trait Json extends IO {
   /**
-    * Use this method instead "parse" exposed by JSON4s, as this one will use Google's "sanitize" of a given String before generating a JValue
+    * Use this method instead "parse" exposed by JSON4s, as this one will use Google's "sanitize" of a given String before generating a JValue.
+    * It is assumed that the given string starts with { and ends with }
     * @param s String The text representing JSON to be generated to a JValue
     * @return Try[JValue] As the parsing may fail a Success of JValue or Failure is generated
     */
-  def toJson(s: String): Try[JValue] = Try { parse(sanitize(s)) }
+  def toJson(s: String): Try[JValue] = Try {
+    val string = s.replaceAll("[\n\r]", "").trim
+
+    if (string.startsWith("{") && string.endsWith("}")) parse(sanitize(string))
+    else throw new Exception(s"The given string does not start with { and/or end with }, as JSON should be: $string")
+  }
 
   /**
     * Acquire JSON from given URL e.g.
