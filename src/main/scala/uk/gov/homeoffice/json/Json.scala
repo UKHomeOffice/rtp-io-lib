@@ -3,6 +3,7 @@ package uk.gov.homeoffice.json
 import java.net.URL
 import scala.io.{Codec, Source}
 import scala.util.Try
+import com.google.json.JsonSanitizer._
 import org.json4s.JValue
 import org.json4s.JsonDSL._
 import org.json4s.jackson.JsonMethods._
@@ -17,6 +18,13 @@ object Json extends Json
   * Read JSON resource
   */
 trait Json extends IO {
+  /**
+    * Use this method instead "parse" exposed by JSON4s, as this one will use Google's "sanitize" of a given String before generating a JValue
+    * @param s String The text representing JSON to be generated to a JValue
+    * @return Try[JValue] As the parsing may fail a Success of JValue or Failure is generated
+    */
+  def toJson(s: String): Try[JValue] = Try { parse(sanitize(s)) }
+
   /**
     * Acquire JSON from given URL e.g.
     * fromClasspath(path("/test.json"))

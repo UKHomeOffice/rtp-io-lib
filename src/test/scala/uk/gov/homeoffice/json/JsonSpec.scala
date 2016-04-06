@@ -10,6 +10,18 @@ import org.specs2.mutable.Specification
 import uk.gov.homeoffice.json.stuff.{MoreStuff, MyStuff}
 
 class JsonSpec extends Specification with Json with JsonFormats {
+  "String representing JSON" should {
+    "generate valid JSON even when there are missing JSON requirements such as quotes around field names and values" in {
+      val json = """
+        {error-message: blah, "original-message": {MessageId: 18f6654e-34b7-4c4d-a51f-8152316ad8e1,Body: 22,Attributes: {}}}
+      """
+
+      val Success(validJson) = toJson(json)
+
+      (validJson \ "original-message" \ "Body").extract[Int] mustEqual 22
+    }
+  }
+
   "Classpath JSON resource" should {
     "give its content" in {
       jsonFromClasspath(path("/test-2.json")) must beSuccessfulTry { JObject("hello" -> JString("world!")) }
