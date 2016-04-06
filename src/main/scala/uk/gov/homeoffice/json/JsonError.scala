@@ -18,3 +18,5 @@ case class JsonError(json: JValue = JNothing, error: Option[String] = None, thro
     throwable map { Json.asJson } getOrElse JObject()
   }
 }
+
+case class JsonErrorException(jsonError: JsonError) extends Exception
