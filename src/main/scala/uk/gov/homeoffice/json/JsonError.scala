@@ -9,13 +9,13 @@ case class JsonError(json: JValue = JNothing, error: Option[String] = None, thro
   def asJson = JObject() merge json merge {
     error.fold(JObject()) { error => "error" -> error }
   } merge {
-    throwable map { Json.asJson } getOrElse JObject()
+    throwable map { Json.toJson } getOrElse JObject()
   }
 
   def toJson = (if (json == JNothing) JObject() else JObject("json" -> json)) merge {
     error.fold(JObject()) { error => "error" -> error }
   } merge {
-    throwable map { Json.asJson } getOrElse JObject()
+    throwable map { Json.toJson } getOrElse JObject()
   }
 }
 

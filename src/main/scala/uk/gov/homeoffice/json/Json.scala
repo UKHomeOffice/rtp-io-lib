@@ -73,7 +73,23 @@ trait Json extends IO {
     * @param t Throwable to be converted to JSON
     * @return JValue the JSON created from the given Throwable
     */
+  @deprecated(message = "Renamed as toJson for consistency with other functionality using toJson", since = "12th April 2016")
   def asJson(t: Throwable): JValue =
+    "errorStackTrace" ->
+      ("errorMessage" -> t.getMessage) ~
+      ("stackTrace" -> t.getStackTrace.toList.map { st =>
+        ("file" -> st.getFileName) ~
+          ("class" -> st.getClassName) ~
+          ("method" -> st.getMethodName) ~
+          ("line" -> st.getLineNumber)
+      })
+
+  /**
+    * Generate JSON representation of a Throwable
+    * @param t Throwable to be converted to JSON
+    * @return JValue the JSON created from the given Throwable
+    */
+  def toJson(t: Throwable): JValue =
     "errorStackTrace" ->
       ("errorMessage" -> t.getMessage) ~
       ("stackTrace" -> t.getStackTrace.toList.map { st =>
@@ -85,5 +101,14 @@ trait Json extends IO {
 
   implicit class JFieldOps(jfield: (String, JValue)) {
     def merge(json: JValue) = (jfield: JValue) merge json
+  }
+
+  implicit class JValueOps(json: JValue) {
+    /** In scope of the following functions */
+    implicit val j = json
+
+    def replace[V : JValuable](transformation: (JValue, V)) = JValuable replace transformation
+
+    def transform[V : JValuable](transformation: (JValue, V => V)) = JValuable transform transformation
   }
 }
