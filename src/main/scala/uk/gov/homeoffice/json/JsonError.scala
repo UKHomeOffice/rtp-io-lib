@@ -17,6 +17,8 @@ case class JsonError(json: JValue = JNothing, error: Option[String] = None, thro
   } merge {
     throwable map { Json.toJson } getOrElse JObject()
   }
+
+  def toException = new JsonErrorException(this)
 }
 
 case class JsonErrorException(jsonError: JsonError) extends Exception
