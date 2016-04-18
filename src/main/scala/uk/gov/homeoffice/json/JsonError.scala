@@ -21,4 +21,17 @@ case class JsonError(json: JValue = JNothing, error: Option[String] = None, thro
   def toException = new JsonErrorException(this)
 }
 
-case class JsonErrorException(jsonError: JsonError) extends Exception
+case class JsonErrorException(jsonError: JsonError) extends Exception(JsonErrorException.toString(jsonError), jsonError.throwable orNull)
+
+object JsonErrorException {
+  def toString(jsonError: JsonError) = {
+    val error = jsonError.error map { "Error: " + _ }
+
+    val errorWithJson = jsonError.json match {
+      case JNothing => error getOrElse ""
+      case json => error map { _ + s", JSON: $json"} getOrElse s", JSON: $json"
+    }
+
+    errorWithJson
+  }
+}
