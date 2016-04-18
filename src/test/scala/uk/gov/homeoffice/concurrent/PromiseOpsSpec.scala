@@ -1,38 +1,34 @@
 package uk.gov.homeoffice.concurrent
 
-import java.util.concurrent.TimeUnit
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{Future, Promise}
+import org.specs2.concurrent.ExecutionEnv
 import org.specs2.mutable.Specification
 
-class PromiseOpsSpec extends Specification with PromiseOps {
+class PromiseOpsSpec(implicit ev: ExecutionEnv) extends Specification with PromiseOps {
   "Promise" should {
     "be realized and still give back the result" in {
       val promise = Promise[String]()
-      var result = "Waiting to be done!"
 
-      Future {
-        TimeUnit.SECONDS.sleep(1)
-        result = promise <~ "Well done!"
-      }
+      promise <~ Future { "Well done!" }
 
-      eventually {
-        result mustEqual "Well done!"
-      }
+      promise.future must beEqualTo("Well done!").await
     }
 
     """be realized (using named "realized") and still give back the result""" in {
       val promise = Promise[String]()
-      var result = "Waiting to be done!"
 
-      Future {
-        TimeUnit.SECONDS.sleep(1)
-        result = promise realized "Well done!"
-      }
+      promise realized Future { "Well done!" }
 
-      eventually {
-        result mustEqual "Well done!"
-      }
+      promise.future must beEqualTo("Well done!").await
+    }
+
+    "be not be realized because of an exception" in {
+      val promise = Promise[String]()
+
+      promise <~> Future { throw new Exception("Whoops!") }
+
+      promise.future must throwAn[Exception](message = "Whoops!").await
     }
   }
 }
