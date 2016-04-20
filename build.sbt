@@ -27,9 +27,5 @@ assemblyMergeStrategy in assembly := {
   case _ => MergeStrategy.first
 }
 
-releaseVersion     := { ver => Version(ver).map(_.withoutQualifier.string).getOrElse(versionFormatError) }
-releaseNextVersion := { ver => Version(ver).map(_.bumpMinor.asSnapshot.string).getOrElse(versionFormatError) }
-
-
 releaseTagComment    := s"Releasing ${(version in ThisBuild).value}"
 releaseCommitMessage := s"Setting version to ${(version in ThisBuild).value}"

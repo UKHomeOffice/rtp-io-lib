@@ -22,6 +22,9 @@ object Build extends Build {
         "-language:postfixOps",
         "-Yrangepos",
         "-Yrepl-sync"),
+      ivyScala := ivyScala.value map {
+        _.copy(overrideScalaVersion = true)
+      },
       resolvers ++= Seq(
         "Artifactory Snapshot Realm" at "http://artifactory.registered-traveller.homeoffice.gov.uk/artifactory/libs-snapshot-local/",
         "Artifactory Release Realm" at "http://artifactory.registered-traveller.homeoffice.gov.uk/artifactory/libs-release-local/",
