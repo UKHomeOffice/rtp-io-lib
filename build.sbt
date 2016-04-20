@@ -25,22 +25,3 @@ assemblyMergeStrategy in assembly := {
   case PathList(ps @ _*) if ps.last endsWith ".java" => MergeStrategy.discard
   case _ => MergeStrategy.first
 }
-
-import sbtrelease.ReleasePlugin.autoImport.ReleaseTransformations._
-
-releaseProcess := Seq[ReleaseStep](
-  checkSnapshotDependencies,
-  inquireVersions,
-  runClean,
-  runTest,
-  setReleaseVersion,
-  commitReleaseVersion,
-  tagRelease,
-  publishArtifacts,
-  setNextVersion,
-  commitNextVersion,
-  pushChanges
-)
-
-releaseTagComment    := s"Releasing ${(version in ThisBuild).value}"
-releaseCommitMessage := s"Setting version to ${(version in ThisBuild).value}"
