@@ -1,3 +1,6 @@
+import sbtrelease.Version
+import sbtrelease._
+
 publishTo := {
   val artifactory = "http://artifactory.registered-traveller.homeoffice.gov.uk/"
 
@@ -23,3 +26,10 @@ assemblyMergeStrategy in assembly := {
   case PathList(ps @ _*) if ps.last endsWith ".java" => MergeStrategy.discard
   case _ => MergeStrategy.first
 }
+
+releaseVersion     := { ver => Version(ver).map(_.withoutQualifier.string).getOrElse(versionFormatError) }
+releaseNextVersion := { ver => Version(ver).map(_.bumpMinor.asSnapshot.string).getOrElse(versionFormatError) }
+
+
+releaseTagComment    := s"Releasing ${(version in ThisBuild).value}"
+releaseCommitMessage := s"Setting version to ${(version in ThisBuild).value}"
