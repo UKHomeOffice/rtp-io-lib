@@ -10,22 +10,6 @@ import scala.concurrent.{Future, Promise}
 trait PromiseOps {
   implicit class PromiseOps[R](p: Promise[R]) {
     /**
-      * Complete a Promise as successful with the given result, and give back said result.
-      * E.g. a function may result in something such as def myFunction = Something { ... }
-      * You can complete a Promise and keep the "flow" of the function be prefixing with the promise to be "realized":
-      * def myFunction = myPromise <~ Something { ... }
-      */
-    def <~(result: R): R = {
-      p success result
-      result
-    }
-
-    /**
-      * Text named version of <~
-      */
-    def realized(result: R): R = <~(result)
-
-    /**
       * Complete a Promise as successful with the given future result, and give back said future result.
       * E.g. a function may result in a Future such as def myFunction = Future { ... }
       * You can complete a Promise and keep the "flow" of the function be prefixing with the promise to be "realized":
@@ -44,7 +28,7 @@ trait PromiseOps {
     /**
       * Complete a Promise as a failure that encapsulates an exception, and give back said future result.
       * E.g. a function may result in a Future such as def myFunction = Future { ... }
-      * You can complete a Promise and keep the "flow" of the function be prefixing with the promise to be "realized":
+      * You can complete a Promise and keep the "flow" of the function be prefixing with the promise to be "unrealized":
       * def myFunction = myPromise <~> Future { ... }
       */
     def <~>(result: Future[R]): Future[R] = result recoverWith {
