@@ -153,6 +153,27 @@ class JsonSpec extends Specification with Json with JsonFormats {
       json \ "not-there" mustEqual JNothing
       json \ "moreStuff" \ "howMuch" mustEqual JInt(10)
     }
+
+    "have a field moved" in {
+      val json = parse("""
+      {
+        "id": "Stuff ID",
+        "moreStuff": {
+          "howMuch": 10
+        }
+      }""")
+
+      val idJson = json \ "id"
+      val result = (json remove { _ == idJson }) merge JObject("moreStuff" -> JObject("id" -> idJson))
+
+      result mustEqual parse("""
+      {
+        "moreStuff": {
+          "howMuch": 10,
+          "id": "Stuff ID"
+        }
+      }""")
+    }
   }
 
   /*"JSON" should {

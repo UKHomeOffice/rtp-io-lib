@@ -11,7 +11,7 @@ class JsonTransformerSpec extends Specification {
   trait Context extends Scope with JsonTransformer
 
   "Mapping JSON" should {
-    "be applied" in  new Context {
+    "be applied" in new Context {
       def transform(json: JValue): JValue Or JsonError = {
         val JsonTransformation(_, newJson) = (
           map("field" -> "newField") ~
@@ -40,6 +40,33 @@ class JsonTransformerSpec extends Specification {
       val Good(result) = transform(flatJson)
 
       result mustEqual json
+    }
+
+    "move a field" in new Context {
+      def transform(json: JValue): JValue Or JsonError = {
+        val JsonTransformation(outstandingJson, newJson) = map("id" -> "moreStuff.id")(json)
+        Good(outstandingJson merge newJson)
+      }
+
+      val json = parse("""
+      {
+        "id": "Stuff ID",
+        "moreStuff": {
+          "howMuch": 10
+        }
+      }""")
+
+      val Good(result) = transform(json)
+
+      println(pretty(render(result)))
+
+      result mustEqual parse("""
+      {
+        "moreStuff": {
+          "howMuch": 10,
+          "id": "Stuff ID"
+        }
+      }""")
     }
   }
 
