@@ -5,8 +5,7 @@ import sbtrelease.ReleasePlugin
 object Build extends Build {
   val moduleName = "rtp-io-lib"
 
-  val root = Project(id = moduleName, base = file("."))
-    .enablePlugins(ReleasePlugin)
+  val root = Project(id = moduleName, base = file(".")).enablePlugins(ReleasePlugin)
     .configs(IntegrationTest)
     .settings(Defaults.itSettings: _*)
     .settings(
