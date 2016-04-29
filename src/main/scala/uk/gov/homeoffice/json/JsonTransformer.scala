@@ -116,7 +116,7 @@ trait JsonTransformer extends JsonFormats with Logging {
               case a @ JArray(list) =>
                 jsonTransformation.newJson remove (_ == a) merge {
                   val updatedList = fromArrayFields.zipWithIndex.foldLeft(list) { case (l, ((key, value), index)) =>
-                    l.zipWithIndex.map { case (existing, i) => if (i == index) existing.merge(JObject(h2 -> convert(value, conversion))) else existing }
+                    l.zipWithIndex map { case (existing, i) => if (i == index) existing.merge(JObject(h2 -> convert(value, conversion))) else existing }
                   }
 
                   JObject(h1 -> JArray(updatedList))
