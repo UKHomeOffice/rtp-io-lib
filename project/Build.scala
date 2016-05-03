@@ -36,7 +36,7 @@ object Build extends Build {
     .settings(libraryDependencies ++= {
       val `json4s-version` = "3.2.11"
       val `logback-version` = "1.1.6"
-      val `rtp-test-lib-version` = "1.2.4"
+      val `rtp-test-lib-version` = "1.3.1"
 
       Seq(
         "com.typesafe" % "config" % "1.3.0" withSources(),
