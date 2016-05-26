@@ -13,6 +13,14 @@ class FeatureSwitchSpec extends Specification {
 
       result must beNone
     }
+
+    "run when defaulted to do so" in new Scope with FeatureSwitch {
+      val result = withFeature("my.feature", default = true) {
+        "Done!"
+      }
+
+      result must beSome("Done!")
+    }
   }
 
   "Feature switch that is configured to false" should {
