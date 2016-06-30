@@ -39,6 +39,7 @@ object Build extends Build {
       val `rtp-test-lib-version` = "1.3.1"
 
       Seq(
+        "commons-codec" % "commons-codec" % "1.10",
         "com.typesafe" % "config" % "1.3.0" withSources(),
         "org.json4s" %% "json4s-native" % `json4s-version` withSources(),
         "org.json4s" %% "json4s-jackson" % `json4s-version` withSources(),
