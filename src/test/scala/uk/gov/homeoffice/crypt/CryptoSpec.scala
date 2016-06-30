@@ -1,15 +1,13 @@
 package uk.gov.homeoffice.crypt
 
+import scala.util.{Random, Success}
 import org.json4s.JsonAST.JObject
 import org.json4s.jackson.JsonMethods._
 import org.json4s.{JString, JValue}
 import org.specs2.matcher.Scope
 import org.specs2.mutable.Specification
 
-import scala.util.{Random, Success}
-
 class CryptoSpec extends Specification {
-
   trait Context extends Crypto with Scope {
     val encryptionIV = "abcdadsgdighcige"
     implicit val secrets = Secrets("4a0783fc-2ca1-11e6-b67b-9e71128c", "A0Suns5tMarked5D1stinct7on")
@@ -69,5 +67,4 @@ class CryptoSpec extends Specification {
       }
     }
   }
-
 }

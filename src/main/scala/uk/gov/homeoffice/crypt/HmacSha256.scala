@@ -3,10 +3,10 @@ package uk.gov.homeoffice.crypt
 import java.nio.charset.StandardCharsets._
 import javax.crypto
 
-
 class HmacSha256  {
-  private val algorithm   = "HMacSha256"
-  private def newMac    = crypto.Mac.getInstance(algorithm)
+  private val algorithm = "HMacSha256"
+
+  private def newMac = crypto.Mac.getInstance(algorithm)
 
   def create(key : String, message : String) = hmac(key.getBytes(UTF_8), message.getBytes(UTF_8))
 
