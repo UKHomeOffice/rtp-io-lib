@@ -9,8 +9,6 @@ import org.json4s.JValue
 import org.json4s.JsonDSL._
 import uk.gov.homeoffice.json.JsonFormats
 
-case class Secrets(encryptionKey: String, signingPassword: String)
-
 trait Crypto extends JsonFormats {
   def encrypt(data: String, iv: String)(implicit secrets: Secrets): JValue = {
     val cipher: Cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
@@ -38,6 +36,7 @@ trait Crypto extends JsonFormats {
 
   private def verifySignatureFor(signedData: String, signingPassword: String): Boolean = {
     require(signedData.nonEmpty)
+
     val signedDataWithClientPassword = sign(signedData.split("----").head, signingPassword)
 
     if (signedData == signedDataWithClientPassword) true else false
