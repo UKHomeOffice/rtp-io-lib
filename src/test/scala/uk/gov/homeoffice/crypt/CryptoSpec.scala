@@ -66,5 +66,21 @@ class CryptoSpec extends Specification {
         case Success(data) => data mustEqual rawData
       }
     }
+
+    "encrypt/descrypt json with no spaces" in new Context {
+      val rawData =
+        """{
+          |  "registeredTravellerNumber": "RT1234567",
+          |  "applicationDate" : "2015-08-26 17:11:12",
+          |  "orderCode": "RRT-826955cd-b4b2-4a97-970b-70bc9965a6ff"
+          |}""".stripMargin
+      val encryptedData = encrypt(compact(parse(rawData)), encryptionIV)
+
+      decrypt(encryptedData) must beLike {
+        case Success(data) => data mustEqual compact(parse(rawData))
+      }
+
+    }.pendingUntilFixed
+
   }
 }
