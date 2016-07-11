@@ -8,7 +8,11 @@ import org.apache.commons.codec.binary.Base64._
 import org.json4s.JValue
 import org.json4s.JsonDSL._
 import uk.gov.homeoffice.json.JsonFormats
+import org.json4s.jackson.JsonMethods._
 
+/**
+  * Encrypt text and decrypt back to text.
+  */
 trait Crypto extends JsonFormats {
   def encrypt(data: String, iv: String)(implicit secrets: Secrets): JValue = {
     val cipher: Cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
@@ -18,6 +22,8 @@ trait Crypto extends JsonFormats {
 
     ("data" -> sign(encodeBase64String(encryptedData), secrets.signingPassword)) ~ ("iv" -> sign(encodeBase64String(iv.getBytes()), secrets.signingPassword))
   }
+
+  def encrypt(data: JValue, iv: String)(implicit secrets: Secrets): JValue = encrypt(pretty(render(data)), iv)
 
   def decrypt(j: JValue)(implicit secrets: Secrets): Try[String] = Try {
     val signedData = (j \ "data").extract[String]
