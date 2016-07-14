@@ -7,23 +7,24 @@ import org.scalactic.Or
 import grizzled.slf4j.Logging
 
 /**
- * Transform JSON from one format to another.
- * The API provides "map" and "mapArray" which are similar.
- *
- * JSON to map from (full up) ->                                        -> Updated JSON to map from (hopefully empty)
- *                              |                                       |
- *                              -------->                    ---------->
- *                                       |------> map >------|
- *                              -------->                    ---------->
- *                              |                                       |
- * JSON to map to (empty)------>                                        -> Updated JSON to map to (hopefully full up)
- *
- * Picture mapping JSON, as handing your (original) JSON to "map" which does the transformation in the following way:
- * - Take a piece of of JSON from the given JSON to be mapped (at the same time removing said JSON from the given JSON).
- * - Apply the transformation according to the declared mapping.
- * - The newly transformed JSON is added to JSON that accumulates all the transformations.
- * - Upon completion, you should (hopefully) end up with an updated version of the original JSON, now empty, and the new JSON that contains all the transformations.
- */
+  * TODO WARNING Work in progress
+  * Transform JSON from one format to another.
+  * The API provides "map" and "mapArray" which are similar.
+  *
+  * JSON to map from (full up) ->                                        -> Updated JSON to map from (hopefully empty)
+  *                              |                                       |
+  *                              -------->                    ---------->
+  *                                       |------> map >------|
+  *                              -------->                    ---------->
+  *                              |                                       |
+  * JSON to map to (empty)------>                                        -> Updated JSON to map to (hopefully full up)
+  *
+  * Picture mapping JSON, as handing your (original) JSON to "map" which does the transformation in the following way:
+  * - Take a piece of of JSON from the given JSON to be mapped (at the same time removing said JSON from the given JSON).
+  * - Apply the transformation according to the declared mapping.
+  * - The newly transformed JSON is added to JSON that accumulates all the transformations.
+  * - Upon completion, you should (hopefully) end up with an updated version of the original JSON, now empty, and the new JSON that contains all the transformations.
+  */
 trait JsonTransformer extends JsonFormats with Logging {
   type FromProperty = String
 
@@ -38,26 +39,26 @@ trait JsonTransformer extends JsonFormats with Logging {
   def transform(json: JValue): JValue Or JsonError
 
   /**
-   * Map a JSON property from one format to another e.g. to map the JSON
-   * {
-   *   "propertyName": "propertyValue"
-   * }
-   * to
-   * {
-   *   "propertyGroup": {
-   *     "newPropertyName": "propertyValue"
-   *   }
-   * }
-   * use the following:
-   * map("propertyName" -> "propertyGroup.newPropertyName")
-   *
-   * Note that a conversion can be provided such that the property must be mapped from a String to an Int e.g.
-   * mapping the above "propertyValue" from a String to an Int:
-   * map("propertyName" -> "propertyGroup.newPropertyName", property => JInt(BigInt(property.extract[String])))
-   * @param propertyMapping he property name mapping e.g "propertyName" -> "propertyGroup.newPropertyName"
-   * @param conversion an optional function to convert a property value to another type
-   * @return PartialFunction[JsonTransformation, JsonTransformation]
-   */
+    * Map a JSON property from one format to another e.g. to map the JSON
+    * {
+    *   "propertyName": "propertyValue"
+    * }
+    * to
+    * {
+    *   "propertyGroup": {
+    *     "newPropertyName": "propertyValue"
+    *   }
+    * }
+    * use the following:
+    * map("propertyName" -> "propertyGroup.newPropertyName")
+    *
+    * Note that a conversion can be provided such that the property must be mapped from a String to an Int e.g.
+    * mapping the above "propertyValue" from a String to an Int:
+    * map("propertyName" -> "propertyGroup.newPropertyName", property => JInt(BigInt(property.extract[String])))
+    * @param propertyMapping he property name mapping e.g "propertyName" -> "propertyGroup.newPropertyName"
+    * @param conversion an optional function to convert a property value to another type
+    * @return PartialFunction[JsonTransformation, JsonTransformation]
+    */
   def map(propertyMapping: PropertyMapping, conversion: JValue => JValue = j => j): PartialFunction[JsonTransformation, JsonTransformation] = {
     case jsonTransformation: JsonTransformation =>
       val (fromProperty, toProperty) = propertyMapping
@@ -77,28 +78,28 @@ trait JsonTransformer extends JsonFormats with Logging {
   }
 
   /**
-   * Map a JSON property array from one format to another e.g. to map the JSON
-   * {
-   *   "propertyName_0": "propertyValue0"
-   *   "propertyName_1": "propertyValue1"
-   * }
-   * to
-   * {
-   *   "propertyGroup": {[
-   *     { "newPropertyName": "propertyValue0" },
-   *     { "newPropertyName": "propertyValue1" }
-   *   ]}
-   * }
-   * use the following:
-   * mapArray("propertyName" -> "propertyGroup.newPropertyName")
-   *
-   * Note that a conversion can be provided such that the property must be mapped from a String to an Int e.g.
-   * mapping the above "propertyValue" from a String to an Int:
-   * mapArray("propertyName" -> "propertyGroup.newPropertyName", property => JInt(BigInt(property.extract[String])))
-   * @param propertyMapping the property name mapping e.g "propertyName" -> "propertyGroup.newPropertyName"
-   * @param conversion an optional function to convert a property value to another type
-   * @return PartialFunction[JsonTransformation, JsonTransformation]
-   */
+    * Map a JSON property array from one format to another e.g. to map the JSON
+    * {
+    *   "propertyName_0": "propertyValue0"
+    *   "propertyName_1": "propertyValue1"
+    * }
+    * to
+    * {
+    *   "propertyGroup": {[
+    *     { "newPropertyName": "propertyValue0" },
+    *     { "newPropertyName": "propertyValue1" }
+    *   ]}
+    * }
+    * use the following:
+    * mapArray("propertyName" -> "propertyGroup.newPropertyName")
+    *
+    * Note that a conversion can be provided such that the property must be mapped from a String to an Int e.g.
+    * mapping the above "propertyValue" from a String to an Int:
+    * mapArray("propertyName" -> "propertyGroup.newPropertyName", property => JInt(BigInt(property.extract[String])))
+    * @param propertyMapping the property name mapping e.g "propertyName" -> "propertyGroup.newPropertyName"
+    * @param conversion an optional function to convert a property value to another type
+    * @return PartialFunction[JsonTransformation, JsonTransformation]
+    */
   def mapArray(propertyMapping: PropertyMapping, conversion: JValue => JValue = j => j): PartialFunction[JsonTransformation, JsonTransformation] = {
     case jsonTransformation: JsonTransformation =>
       val (fromProperty, toProperty) = propertyMapping
@@ -149,11 +150,11 @@ trait JsonTransformer extends JsonFormats with Logging {
 
   implicit class TransformerOps(json: JValue) {
     /**
-     * Transform the JSON that matches the given "properties" and encapsulate those transformations into a JArray named by the given "property".
-     * e.g. takes { givenName_1: "Tim", givenName_2: "David", surname_1: "Gent", surname_2: "Ainslie" }
-     *   transformArray("previousNames", ("givenName", "firstName"), ("surname","familyName"))
-     *   returns { names: [{ firstName: "Tim", surname: "Gent" }, { firstName: "David", surname: "Ainslie" }] }
-     */
+      * Transform the JSON that matches the given "properties" and encapsulate those transformations into a JArray named by the given "property".
+      * e.g. takes { givenName_1: "Tim", givenName_2: "David", surname_1: "Gent", surname_2: "Ainslie" }
+      *   transformArray("previousNames", ("givenName", "firstName"), ("surname","familyName"))
+      *   returns { names: [{ firstName: "Tim", surname: "Gent" }, { firstName: "David", surname: "Ainslie" }] }
+      */
     def transformArray(property: String, properties: (String, String)*): JValue = {
       val fields = json.filterField {
         case (key, value) if key.startsWith(properties.head._1) => true
