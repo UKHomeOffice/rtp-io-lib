@@ -9,6 +9,12 @@ trait Network extends Logging {
   def freeport[R](retries: Int = 5)(f: Port => R): R = {
     require(retries >= 0)
 
+    def port: Int = {
+      val port = new ServerSocket(0).getLocalPort
+      info(s"Attempting to use free port $port")
+      port
+    }
+
     def freeport(retries: Int = 5, retry: Int)(f: Port => R): R = try {
       f(port)
     } catch {
@@ -16,11 +22,5 @@ trait Network extends Logging {
     }
 
     freeport(retries, 0)(f)
-  }
-
-  def port: Int = {
-    val port = new ServerSocket(0).getLocalPort
-    info(s"Attempting to use free port $port")
-    port
   }
 }
