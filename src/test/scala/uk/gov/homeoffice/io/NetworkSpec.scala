@@ -9,7 +9,7 @@ class NetworkSpec extends Specification {
 
   "Network" should {
     "get a free port" in new Context {
-      val result = freeport(1) { port =>
+      val result = freeport() { port =>
         "success"
       }
 
@@ -17,11 +17,12 @@ class NetworkSpec extends Specification {
     }
 
     "get a free port after 1 bind exception" in new Context {
-      var retries = 0
+      var retried = -1
 
-      val result = freeport(1) { port =>
-        if (retries == 0) {
-          retries = retries + 1
+      val result = freeport() { port =>
+        retried = retried + 1
+
+        if (retried == 0) {
           throw new BindException
         } else {
           "success"
@@ -29,7 +30,23 @@ class NetworkSpec extends Specification {
       }
 
       result mustEqual "success"
-      retries mustEqual 1
+      retried mustEqual 1
+    }
+
+    "fail to get a free port after 1 retry" in new Context {
+      var retried = -1
+
+      freeport(1) { port =>
+        retried = retried + 1
+
+        if (retried <= 1) {
+          throw new BindException
+        } else {
+          "success"
+        }
+      } must throwA[BindException]
+
+      retried mustEqual 1
     }
   }
 }
