@@ -15,8 +15,8 @@ import org.json4s.jackson.JsonMethods._
   */
 trait Crypto extends JsonFormats {
   def encrypt(data: String, iv: String)(implicit secrets: Secrets): JValue = {
-    val cipher: Cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
-    val secretKey = new SecretKeySpec(secrets.encryptionKey.getBytes(UTF_8), "AES")
+    val cipher: Cipher = Cipher.getInstance(secrets.transformation)
+    val secretKey = new SecretKeySpec(secrets.encryptionKey.getBytes(UTF_8), secrets.algorithm)
     cipher.init(Cipher.ENCRYPT_MODE, secretKey, new IvParameterSpec(iv.getBytes(UTF_8), 0, cipher.getBlockSize))
     val encryptedData = cipher.doFinal(data.getBytes(UTF_8))
 
@@ -30,8 +30,8 @@ trait Crypto extends JsonFormats {
     val signedIV = (j \ "iv").extract[String]
 
     if (verifySignatureFor(signedData, secrets.signingPassword) && verifySignatureFor(signedIV, secrets.signingPassword)) {
-      val key = new SecretKeySpec(secrets.encryptionKey.getBytes(UTF_8), "AES")
-      val cipher: Cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
+      val key = new SecretKeySpec(secrets.encryptionKey.getBytes(UTF_8), secrets.algorithm)
+      val cipher: Cipher = Cipher.getInstance(secrets.transformation)
 
       cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(decodeBase64(signedIV.getBytes()), 0, cipher.getBlockSize))
       new String(cipher.doFinal(decodeBase64(signedData.getBytes(UTF_8))))
