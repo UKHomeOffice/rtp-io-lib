@@ -3,6 +3,7 @@ package uk.gov.homeoffice.crypt
 import java.nio.charset.StandardCharsets._
 import javax.crypto.Cipher
 import javax.crypto.spec.{IvParameterSpec, SecretKeySpec}
+
 import scala.util.Try
 import org.apache.commons.codec.binary.Base64._
 import org.json4s.JValue
@@ -34,7 +35,8 @@ trait Crypto extends JsonFormats {
       val cipher: Cipher = Cipher.getInstance(secrets.transformation)
 
       cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(decodeBase64(signedIV.getBytes()), 0, cipher.getBlockSize))
-      new String(cipher.doFinal(decodeBase64(signedData.getBytes(UTF_8))))
+      new String(cipher.doFinal(decodeBase64(signedData.split("----").head.getBytes(UTF_8))))
+
     } else {
       throw new IllegalAccessException(s"Badly signed data $signedData & signedIV $signedIV")
     }
