@@ -12,7 +12,6 @@ import scala.util.Try
 case class Resource[R](r: R, encoding: Codec = Codec.UTF8) {
   /**
     * What "to" generate from said resource
- *
     * @param ev Evidence that manages the reading of the resource in"to" the require format
     * @tparam T The format of what "to" read this resource in"to" such as generating JSON (JValue) from resource
     * @return Success of the required format read in"to" or Failure encapsulting the exception

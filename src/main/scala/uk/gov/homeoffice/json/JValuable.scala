@@ -8,6 +8,8 @@ trait JValuable[V] {
 }
 
 object JValuable extends JsonFormats {
+  def apply[V : JValuable]: JValuable[V] = implicitly[JValuable[V]]
+
   /**
    * Replace the value of a given field (first parameter of tuple transformation) for some JSON (an implicit JValue).
    * @param transformation Two parameter tuple where the first parameter is the field to be replaced and the second is the new value
@@ -16,7 +18,7 @@ object JValuable extends JsonFormats {
    * @return JValue of the (new) JSON containing the field that has been replaced
    */
   def replace[V : JValuable](transformation: (JValue, V))(implicit json: JValue): JValue = json transformField {
-    case (k, v) if v == transformation._1 => k -> implicitly[JValuable[V]].asJValue(transformation._2)
+    case (k, v) if v == transformation._1 => k -> JValuable[V].asJValue(transformation._2)
   }
 
   /**
@@ -28,10 +30,10 @@ object JValuable extends JsonFormats {
    */
   def transform[V : JValuable](transformation: (JValue, V => V))(implicit json: JValue): JValue = json transformField {
     case (k, v) if v == transformation._1 => try {
-      k -> implicitly[JValuable[V]].asJValue(transformation._2(v.extract[Any].asInstanceOf[V]))
+      k -> JValuable[V].asJValue(transformation._2(v.extract[Any].asInstanceOf[V]))
     } catch {
       case t: Throwable =>
-        k -> implicitly[JValuable[V]].asJValue(transformation._2(v.asInstanceOf[V]))
+        k -> JValuable[V].asJValue(transformation._2(v.asInstanceOf[V]))
     }
   }
 
