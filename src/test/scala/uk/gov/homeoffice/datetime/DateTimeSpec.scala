@@ -1,9 +1,9 @@
-package uk.gov.homeoffice.time
+package uk.gov.homeoffice.datetime
 
 import com.github.nscala_time.time.Imports._
 import org.specs2.mutable.Specification
 
-class TimeSpec extends Specification {
+class DateTimeSpec extends Specification {
   "Date as a String" should {
     "be converted to DateTime formatted as yyyy-MM-dd" in {
       "1999-12-30" as `yyyy-MM-dd` must beLike {
