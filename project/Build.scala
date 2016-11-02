@@ -29,6 +29,7 @@ object Build extends Build {
         "Artifactory Release Realm" at "http://artifactory.registered-traveller.homeoffice.gov.uk/artifactory/libs-release-local/",
         "Typesafe Repository" at "http://repo.typesafe.com/typesafe/releases/",
         "Sonatype Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/",
+        "Sonatype Releases" at "https://oss.sonatype.org/content/repositories/releases/",
         "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases",
         "Kamon Repository" at "http://repo.kamon.io"
       )
@@ -48,6 +49,7 @@ object Build extends Build {
         "com.github.fge" % "json-schema-validator" % "2.2.6" withSources(),
         "org.scala-lang.modules" %% "scala-pickling" % "0.10.1" withSources(),
         "com.lihaoyi" %% "pprint" % "0.3.4",
+        "com.github.nscala-time" %% "nscala-time" % "2.14.0" withSources(),
         "org.clapper" %% "grizzled-slf4j" % "1.0.2",
         "ch.qos.logback" % "logback-core" % `logback-version`,
         "ch.qos.logback" % "logback-classic" % `logback-version`,
