@@ -1,5 +1,3 @@
-
-
 publishTo := {
   val artifactory = "http://artifactory.registered-traveller.homeoffice.gov.uk/"
 
