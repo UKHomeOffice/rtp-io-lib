@@ -35,22 +35,22 @@ object Build extends Build {
       )
     )
     .settings(libraryDependencies ++= {
-      val `json4s-version` = "3.2.11"
-      val `logback-version` = "1.1.6"
-      val `rtp-test-lib-version` = "1.3.1"
+      val `json4s-version` = "3.5.0"
+      val `logback-version` = "1.1.8"
+      val `rtp-test-lib-version` = "1.4.0"
 
       Seq(
         "commons-codec" % "commons-codec" % "1.10",
-        "com.typesafe" % "config" % "1.3.0" withSources(),
+        "com.typesafe" % "config" % "1.3.1" withSources(),
         "org.json4s" %% "json4s-native" % `json4s-version` withSources(),
         "org.json4s" %% "json4s-jackson" % `json4s-version` withSources(),
         "org.json4s" %% "json4s-ext" % `json4s-version` withSources(),
         "org.json4s" %% "json4s-mongo" % `json4s-version` withSources(),
         "com.github.fge" % "json-schema-validator" % "2.2.6" withSources(),
         "org.scala-lang.modules" %% "scala-pickling" % "0.10.1" withSources(),
-        "com.lihaoyi" %% "pprint" % "0.3.4",
-        "com.github.nscala-time" %% "nscala-time" % "2.14.0" withSources(),
-        "org.clapper" %% "grizzled-slf4j" % "1.0.2",
+        "com.lihaoyi" %% "pprint" % "0.4.4",
+        "com.github.nscala-time" %% "nscala-time" % "2.16.0" withSources(),
+        "org.clapper" %% "grizzled-slf4j" % "1.3.0",
         "ch.qos.logback" % "logback-core" % `logback-version`,
         "ch.qos.logback" % "logback-classic" % `logback-version`,
         "uk.gov.homeoffice" %% "rtp-test-lib" % `rtp-test-lib-version` withSources()
