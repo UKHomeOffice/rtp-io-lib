@@ -23,7 +23,7 @@ class JsonSchemaSpec extends Specification with Logging {
 
     "be invalidated when providing JSON that is not a schema" in {
       JsonSchema(JObject("bad" -> JString("schema"))) must throwA[BadSchemaException].like {
-        case t => t.getMessage mustEqual "Given JSON schema is invalid, missing mandatory fields: $schema, id, type, properties"
+        case t => t.getMessage mustEqual "Given JSON schema is invalid, missing mandatory fields: $schema, id, type"
       }
     }
 
@@ -115,6 +115,43 @@ class JsonSchemaSpec extends Specification with Logging {
 
       JsonSchema(schema) validate json mustEqual Good(json)
     }
+
+    "validate against array schema" in {
+      val json = parse("""
+      [{
+        "code" : "clc",
+        "name" : "Baia Mare Airport",
+        "countryCode" : "ccc",
+        "timeZoneRegionName" : "Europe/Bucharest"
+        }, {
+        "code" : "BAZ",
+        "name" : "Barbelos Airport",
+        "countryCode" : "BR",
+        "timeZoneRegionName" : "America/Porto_Velho"
+        } ]""")
+
+      JsonSchema(arraySchema) validate json mustEqual Good(json)
+    }
+
+    "invalidate json against array schema" in {
+      val json = parse("""
+      [{
+        "code" : "clcclclcl",
+        "name" : "Baia Mare Airport",
+        "countryCode" : "cccRRR",
+        "timeZoneRegionName" : "Europe/Bucharest"
+        }, {
+        "code" : "BAZ",
+        "name" : "Barbelos Airport",
+        "countryCode" : "BR",
+        "timeZoneRegionName" : "America/Porto_Velho"
+        } ]""")
+
+      val Bad(JsonError(j, Some(error), _)) = JsonSchema(arraySchema).validate(json)
+      error must contain(""""clcclclcl" is too long""")
+      error must contain(""""cccRRR" is too long""")
+      j mustEqual json
+    }
   }
 }
 
@@ -163,5 +200,38 @@ object JsonSchemaSpec {
       "address",
       "phoneNumbers"
     ]
+  }""")
+
+  val arraySchema = parse("""
+  {
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "http://www.ukgov.com/arrayschema",
+    "type": "array",
+    "items": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "maxLength": 3
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "countryCode": {
+          "type": "string",
+          "maxLength": 3
+        },
+        "timeZoneRegionName": {
+          "type": "string",
+          "maxLength": 40
+        }
+      },
+      "required": [
+        "name",
+        "countryCode",
+        "timeZoneRegionName"
+      ]
+    }
   }""")
 }
