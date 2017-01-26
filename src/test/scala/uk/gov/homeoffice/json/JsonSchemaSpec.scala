@@ -163,7 +163,7 @@ class JsonSchemaSpec extends Specification with Logging {
   }
 
   "Schema validation" should {
-    "validate against one off schema" in {
+    "validate against one of schema" in {
       val json = parse(
         """
       {
@@ -175,7 +175,7 @@ class JsonSchemaSpec extends Specification with Logging {
     }
 
 
-    "invalidate against one off schema" in {
+    "invalidate against one of schema" in {
       val json = parse(
         """
       {
