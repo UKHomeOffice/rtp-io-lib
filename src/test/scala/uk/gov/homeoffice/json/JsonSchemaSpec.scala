@@ -28,7 +28,8 @@ class JsonSchemaSpec extends Specification with Logging {
     }
 
     "be invalidated when providing JSON that does not conform to the JSON schema specification" in {
-      val schema = parse("""
+      val schema = parse(
+        """
       {
         "id": "http://www.bad.com/schema",
         "$schema": "http://json-schema.org/draft-04/schema",
@@ -44,7 +45,8 @@ class JsonSchemaSpec extends Specification with Logging {
     }
 
     "be invalidated when providing JSON that does not conform to the JSON schema specification and print to console the generated error message" in {
-      val schema = parse("""
+      val schema = parse(
+        """
       {
         "id": "http://www.bad.com/schema",
         "$schema": "http://json-schema.org/draft-04/schema",
@@ -75,7 +77,8 @@ class JsonSchemaSpec extends Specification with Logging {
 
   "JSON" should {
     "always be validated against an empty JSON schema" in {
-      val whateverJson = parse("""
+      val whateverJson = parse(
+        """
       {
         "blah": "blah"
       }""")
@@ -84,7 +87,8 @@ class JsonSchemaSpec extends Specification with Logging {
     }
 
     "highlight errors when failing to validate against schema" in {
-      val json = parse("""
+      val json = parse(
+        """
       {
         "bad": "data"
       }""")
@@ -95,7 +99,8 @@ class JsonSchemaSpec extends Specification with Logging {
     }
 
     "validate against schema" in {
-      val json = parse("""
+      val json = parse(
+        """
       {
         "address": {
           "street": "The Street",
@@ -117,7 +122,8 @@ class JsonSchemaSpec extends Specification with Logging {
     }
 
     "validate against array schema" in {
-      val json = parse("""
+      val json = parse(
+        """
       [{
         "code" : "clc",
         "name" : "Baia Mare Airport",
@@ -134,7 +140,8 @@ class JsonSchemaSpec extends Specification with Logging {
     }
 
     "invalidate json against array schema" in {
-      val json = parse("""
+      val json = parse(
+        """
       [{
         "code" : "clcclclcl",
         "name" : "Baia Mare Airport",
@@ -152,11 +159,40 @@ class JsonSchemaSpec extends Specification with Logging {
       error must contain(""""cccRRR" is too long""")
       j mustEqual json
     }
+
+  }
+
+  "Schema validation" should {
+    "validate against one of schema" in {
+      val json = parse(
+        """
+      {
+ |    "registeredTravellerNumber": "RTASDFGHJ",
+ |    "linkExpires": "2015-06-26",
+ |    "hash": "ABABABAABA"
+ |}""".stripMargin)
+      JsonSchema(oneOfSchema) validate json mustEqual Good(json)
+    }
+
+
+    "invalidate against one of schema" in {
+      val json = parse(
+        """
+      {
+ |    "registeredTravellerNumber": "RTAS&W&DFGHJ",
+ |    "linkExpires": "2015-06-26",
+ |    "hash": "ABABABAABA"
+ |}""".stripMargin)
+      val Bad(JsonError(j, Some(error), _)) = JsonSchema(oneOfSchema).validate(json)
+      error must contain("does not match input string")
+      j mustEqual json
+    }
   }
 }
 
 object JsonSchemaSpec {
-  val schema = parse("""
+  val schema = parse(
+    """
   {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "id": "http://www.bad.com/schema",
@@ -202,7 +238,8 @@ object JsonSchemaSpec {
     ]
   }""")
 
-  val arraySchema = parse("""
+  val arraySchema = parse(
+    """
   {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "id": "http://www.ukgov.com/arrayschema",
@@ -234,4 +271,46 @@ object JsonSchemaSpec {
       ]
     }
   }""")
+
+  val oneOfSchema = parse(
+    """{
+      |  "$schema": "http://json-schema.org/draft-04/schema#",
+      |  "id": "http://www.gov.uk/rt/self-service/request",
+      |  "type": "object",
+      |  "oneOf": [{
+      |    "properties": {
+      |      "registeredTravellerNumber": {
+      |        "type": "string",
+      |        "pattern":  "^\\w{8,10}$"
+      |      },
+      |      "linkExpires": {
+      |        "type": "string",
+      |        "pattern": "^([0-9]{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$"
+      |      },
+      |      "hash": {
+      |        "type": "string"
+      |      }
+      |    },
+      |    "required": [
+      |      "registeredTravellerNumber",
+      |      "linkExpires",
+      |      "hash"
+      |    ]
+      |  }, {
+      |    "properties": {
+      |      "registeredTravellerNumber": {
+      |        "type": "string",
+      |        "pattern":  "^\\w{8,10}$"
+      |      },
+      |      "dateOfBirth": {
+      |        "type": "string",
+      |        "pattern": "^([0-9]{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$"
+      |      }
+      |    },
+      |    "required": [
+      |      "registeredTravellerNumber",
+      |      "dateOfBirth"
+      |    ]
+      |  }]
+      |}""".stripMargin)
 }
