@@ -53,8 +53,6 @@ object JsonSchema extends Json with JsonFormats {
     // TODO Not sure I like this "val" followed by "if" - Think validation "options" can be given to the underlying validator, but don't know how.
     val missingRequiredProperties = Seq("$schema", "id", "type").foldLeft(Seq.empty[String]) {
       case (seq, p) if schema \ p == JNothing => seq :+ p
-      case (seq, p) if p == "type" && schema \ "type" == JString("object") && schema \ "properties" == JNothing => seq :+ p
-      case (seq, p) if p == "type" && schema \ "type" == JString("array") && schema \ "items" == JNothing => seq :+ p
       case (seq, _) => seq
     }
 
