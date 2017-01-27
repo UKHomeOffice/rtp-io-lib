@@ -36,8 +36,8 @@ object Build extends Build {
     )
     .settings(libraryDependencies ++= {
       val `json4s-version` = "3.5.0"
-      val `logback-version` = "1.1.8"
-      val `rtp-test-lib-version` = "1.4.0"
+      val `scalactic-version` = "3.0.1"
+      val `rtp-test-lib-version` = "1.4.1"
 
       Seq(
         "commons-codec" % "commons-codec" % "1.10",
@@ -50,9 +50,7 @@ object Build extends Build {
         "org.scala-lang.modules" %% "scala-pickling" % "0.10.1" withSources(),
         "com.lihaoyi" %% "pprint" % "0.4.4",
         "com.github.nscala-time" %% "nscala-time" % "2.16.0" withSources(),
-        "org.clapper" %% "grizzled-slf4j" % "1.3.0",
-        "ch.qos.logback" % "logback-core" % `logback-version`,
-        "ch.qos.logback" % "logback-classic" % `logback-version`,
+        "org.scalactic" %% "scalactic" % `scalactic-version` withSources(),
         "uk.gov.homeoffice" %% "rtp-test-lib" % `rtp-test-lib-version` withSources()
       ) ++ Seq(
         "uk.gov.homeoffice" %% "rtp-test-lib" % `rtp-test-lib-version` % Test classifier "tests" withSources()
