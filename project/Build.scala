@@ -36,7 +36,7 @@ object Build extends Build {
     )
     .settings(libraryDependencies ++= {
       val `json4s-version` = "3.5.0"
-      val `scalactic-version` = "3.0.1"
+      val `scalactic-version` = "2.2.6"
       val `rtp-test-lib-version` = "1.4.1"
 
       Seq(
