@@ -10,7 +10,7 @@ class PromiseOpsSpec(implicit ev: ExecutionEnv) extends Specification with Promi
     "be realized and still give back the result" in {
       val promise = Promise[String]()
 
-      promise <~ Future { "Well done!" }
+      promise <~ Future.successful("Well done!")
 
       promise.future must beEqualTo("Well done!").await
     }
@@ -18,7 +18,7 @@ class PromiseOpsSpec(implicit ev: ExecutionEnv) extends Specification with Promi
     """be realized (using named "realized") and still give back the result""" in {
       val promise = Promise[String]()
 
-      promise realized Future { "Well done!" }
+      promise realized Future.successful("Well done!")
 
       promise.future must beEqualTo("Well done!").await
     }
@@ -26,7 +26,7 @@ class PromiseOpsSpec(implicit ev: ExecutionEnv) extends Specification with Promi
     "be not be realized because of an exception" in {
       val promise = Promise[String]()
 
-      promise <~> Future { throw new Exception("Whoops!") }
+      promise <~> Future.failed(new Exception("Whoops!"))
 
       promise.future must throwAn[Exception](message = "Whoops!").await
     }
@@ -34,7 +34,7 @@ class PromiseOpsSpec(implicit ev: ExecutionEnv) extends Specification with Promi
     """be not be realized (using named "unrealized") because of an exception""" in {
       val promise = Promise[String]()
 
-      promise unrealized Future { throw new Exception("Whoops!") }
+      promise unrealized Future.failed(new Exception("Whoops!"))
 
       promise.future must throwAn[Exception](message = "Whoops!").await
     }
