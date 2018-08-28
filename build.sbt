@@ -39,7 +39,7 @@ libraryDependencies ++= Seq(
 )
 
 publishTo := {
-  val artifactory = "http://artifactory.registered-traveller.homeoffice.gov.uk/"
+  val artifactory = sys.env.get("ARTIFACTORY_SERVER").getOrElse("http://artifactory.registered-traveller.homeoffice.gov.uk/")
 
   if (isSnapshot.value)
     Some("snapshot" at artifactory + "artifactory/libs-snapshot-local")
