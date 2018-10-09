@@ -14,6 +14,16 @@ val root = Project(id = moduleName, base = file("."))
     crossScalaVersions := Seq("2.11.8", "2.12.6")
   )
 
+resolvers ++= Seq(
+  "Artifactory Snapshot Realm" at "http://artifactory.registered-traveller.homeoffice.gov.uk/artifactory/libs-snapshot-local/",
+  "Artifactory Release Realm" at "http://artifactory.registered-traveller.homeoffice.gov.uk/artifactory/libs-release-local/",
+  "Typesafe Repository" at "http://repo.typesafe.com/typesafe/releases/",
+  "Sonatype Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/",
+  "Sonatype Releases" at "https://oss.sonatype.org/content/repositories/releases/",
+  "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases",
+  "Kamon Repository" at "http://repo.kamon.io"
+)
+
 val json4sVersion = "3.5.4"
 
 libraryDependencies ++= Seq(
@@ -36,20 +46,20 @@ publishTo := {
   if (isSnapshot.value)
     Some("snapshot" at artifactory + "artifactory/libs-snapshot-local")
   else
-    Some("release"  at artifactory + "artifactory/libs-release-local")
+    Some("release" at artifactory + "artifactory/libs-release-local")
 }
 
 // Enable publishing the jar produced by `test:package`
-publishArtifact in (Test, packageBin) := true
+publishArtifact in(Test, packageBin) := true
 
 // Enable publishing the test API jar
-publishArtifact in (Test, packageDoc) := true
+publishArtifact in(Test, packageDoc) := true
 
 // Enable publishing the test sources jar
-publishArtifact in (Test, packageSrc) := true
+publishArtifact in(Test, packageSrc) := true
 
 assemblyMergeStrategy in assembly := {
   case PathList("META-INF", "MANIFEST.MF") => MergeStrategy.discard
-  case PathList(ps @ _*) if ps.last endsWith ".java" => MergeStrategy.discard
+  case PathList(ps@_*) if ps.last endsWith ".java" => MergeStrategy.discard
   case _ => MergeStrategy.first
 }
