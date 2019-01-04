@@ -1,10 +1,9 @@
 import sbt._
-import sbtrelease.ReleasePlugin
 
 val moduleName = "rtp-io-lib"
 
 val root = Project(id = moduleName, base = file("."))
-  .enablePlugins(ReleasePlugin)
+  .enablePlugins(GitVersioning)
   .configs(IntegrationTest)
   .settings(Defaults.itSettings: _*)
   .settings(
@@ -37,29 +36,27 @@ libraryDependencies ++= Seq(
   "com.lihaoyi" %% "pprint" % "0.4.4",
   "com.github.nscala-time" %% "nscala-time" % "2.16.0",
   "org.scalactic" %% "scalactic" % "3.0.5",
-  "uk.gov.homeoffice" %% "rtp-test-lib" % "1.4.8"
+  "uk.gov.homeoffice" %% "rtp-test-lib" % "1.6.5-gb79f646"
 )
 
 publishTo := {
   val artifactory = sys.env.get("ARTIFACTORY_SERVER").getOrElse("http://artifactory.registered-traveller.homeoffice.gov.uk/")
-
-  if (isSnapshot.value)
-    Some("snapshot" at artifactory + "artifactory/libs-snapshot-local")
-  else
-    Some("release" at artifactory + "artifactory/libs-release-local")
+  Some("release" at artifactory + "artifactory/libs-release-local")
 }
 
-// Enable publishing the jar produced by `test:package`
 publishArtifact in(Test, packageBin) := true
-
-// Enable publishing the test API jar
 publishArtifact in(Test, packageDoc) := true
-
-// Enable publishing the test sources jar
 publishArtifact in(Test, packageSrc) := true
 
-assemblyMergeStrategy in assembly := {
-  case PathList("META-INF", "MANIFEST.MF") => MergeStrategy.discard
-  case PathList(ps@_*) if ps.last endsWith ".java" => MergeStrategy.discard
-  case _ => MergeStrategy.first
-}
+git.useGitDescribe := true
+git.gitDescribePatterns := Seq("v*.*")
+git.gitTagToVersionNumber := { tag :String =>
+
+val branchTag = if (git.gitCurrentBranch.value == "master") "" else "-" + git.gitCurrentBranch.value
+val uncommit = if (git.gitUncommittedChanges.value) "-U" else ""
+
+tag match {
+  case v if v.matches("v\\d+.\\d+") => Some(s"$v.0${branchTag}${uncommit}".drop(1))
+  case v if v.matches("v\\d+.\\d+-.*") => Some(s"${v.replaceFirst("-",".")}${branchTag}${uncommit}".drop(1))
+  case _ => None
+}}
