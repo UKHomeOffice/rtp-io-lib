@@ -1,5 +1,4 @@
 import sbt._
-import sbtrelease.ReleasePlugin
 
 val moduleName = "rtp-io-lib"
 
