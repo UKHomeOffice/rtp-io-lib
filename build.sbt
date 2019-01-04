@@ -36,7 +36,7 @@ libraryDependencies ++= Seq(
   "com.lihaoyi" %% "pprint" % "0.4.4",
   "com.github.nscala-time" %% "nscala-time" % "2.16.0",
   "org.scalactic" %% "scalactic" % "3.0.5",
-  "uk.gov.homeoffice" %% "rtp-test-lib" % "1.6.5-gb79f646"
+  "uk.gov.homeoffice" %% "rtp-test-lib" % "1.6.6-g6f56307"
 )
 
 publishTo := {
@@ -56,7 +56,7 @@ val branchTag = if (git.gitCurrentBranch.value == "master") "" else "-" + git.gi
 val uncommit = if (git.gitUncommittedChanges.value) "-U" else ""
 
 tag match {
-  case v if v.matches("v\\d+.\\d+") => Some(s"$v.0${branchTag}${uncommit}".drop(1))
+  case v if v.matches("v\\d+.\\d+") => Some(s"$v.0${uncommit}".drop(1))
   case v if v.matches("v\\d+.\\d+-.*") => Some(s"${v.replaceFirst("-",".")}${branchTag}${uncommit}".drop(1))
   case _ => None
 }}
