@@ -21,7 +21,6 @@ resolvers ++= Seq(
   "Typesafe Repository" at "http://repo.typesafe.com/typesafe/releases/",
   "Sonatype Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/",
   "Sonatype Releases" at "https://oss.sonatype.org/content/repositories/releases/",
-  "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases",
   "Kamon Repository" at "http://repo.kamon.io"
 )
 
