@@ -1,6 +1,8 @@
-import sbt._
+import sbt.{Credentials, Path, _}
 
 val moduleName = "rtp-io-lib"
+
+credentials += Credentials(Path.userHome / ".ivy2" / ".credentials")
 
 val root = Project(id = moduleName, base = file("."))
   .enablePlugins(GitVersioning)
@@ -14,12 +16,11 @@ val root = Project(id = moduleName, base = file("."))
   )
 
 resolvers ++= Seq(
-  "Artifactory Snapshot Realm" at "http://artifactory.registered-traveller.homeoffice.gov.uk/artifactory/libs-snapshot-local/",
-  "Artifactory Release Realm" at "http://artifactory.registered-traveller.homeoffice.gov.uk/artifactory/libs-release-local/",
+  "Artifactory Snapshot Realm" at "https://artifactory.digital.homeoffice.gov.uk/artifactory/libs-snapshot-local/",
+  "Artifactory Release Realm" at "https://artifactory.digital.homeoffice.gov.uk/artifactory/libs-release-local/",
   "Typesafe Repository" at "http://repo.typesafe.com/typesafe/releases/",
   "Sonatype Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/",
   "Sonatype Releases" at "https://oss.sonatype.org/content/repositories/releases/",
-  "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases",
   "Kamon Repository" at "http://repo.kamon.io"
 )
 
@@ -40,7 +41,7 @@ libraryDependencies ++= Seq(
 )
 
 publishTo := {
-  val artifactory = sys.env.get("ARTIFACTORY_SERVER").getOrElse("http://artifactory.registered-traveller.homeoffice.gov.uk/")
+  val artifactory = sys.env.get("ARTIFACTORY_SERVER").getOrElse("https://artifactory.digital.homeoffice.gov.uk/")
   Some("release" at artifactory + "artifactory/libs-release-local")
 }
 
