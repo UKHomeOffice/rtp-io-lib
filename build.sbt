@@ -11,8 +11,8 @@ val root = Project(id = moduleName, base = file("."))
   .settings(
     name := moduleName,
     organization := "uk.gov.homeoffice",
-    scalaVersion := "2.12.6",
-    crossScalaVersions := Seq("2.11.8", "2.12.6")
+    scalaVersion := "2.12.16",
+    crossScalaVersions := Seq("2.11.8", "2.12.16")
   )
 
 resolvers ++= Seq(
@@ -24,19 +24,19 @@ resolvers ++= Seq(
   "Kamon Repository" at "http://repo.kamon.io"
 )
 
-val json4sVersion = "3.5.4"
+val json4sVersion = "3.6.12"
 
 libraryDependencies ++= Seq(
-  "commons-codec" % "commons-codec" % "1.10",
-  "com.typesafe" % "config" % "1.3.1",
+  "commons-codec" % "commons-codec" % "1.15",
+  "com.typesafe" % "config" % "1.4.2",
   "org.json4s" %% "json4s-native" % json4sVersion,
   "org.json4s" %% "json4s-jackson" % json4sVersion,
   "org.json4s" %% "json4s-ext" % json4sVersion,
   "org.json4s" %% "json4s-mongo" % json4sVersion,
   "com.github.fge" % "json-schema-validator" % "2.2.6",
-  "com.lihaoyi" %% "pprint" % "0.4.4",
-  "com.github.nscala-time" %% "nscala-time" % "2.16.0",
-  "org.scalactic" %% "scalactic" % "3.0.5",
+  "com.lihaoyi" %% "pprint" % "0.7.3",
+  "com.github.nscala-time" %% "nscala-time" % "2.32.0",
+  "org.scalactic" %% "scalactic" % "3.2.13",
   "uk.gov.homeoffice" %% "rtp-test-lib" % "1.6.6-g6f56307"
 )
 
