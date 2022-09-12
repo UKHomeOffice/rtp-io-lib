@@ -37,7 +37,7 @@ libraryDependencies ++= Seq(
   "com.lihaoyi" %% "pprint" % "0.7.3",
   "com.github.nscala-time" %% "nscala-time" % "2.32.0",
   "org.scalactic" %% "scalactic" % "3.2.13",
-  "uk.gov.homeoffice" %% "rtp-test-lib" % "1.6.6-g6f56307"
+  "uk.gov.homeoffice" %% "rtp-test-lib" % "1.6.18-g13a878a"
 )
 
 publishTo := {
