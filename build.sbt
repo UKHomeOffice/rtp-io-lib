@@ -27,6 +27,7 @@ resolvers ++= Seq(
 val json4sVersion = "3.6.12"
 
 libraryDependencies ++= Seq(
+  "ch.qos.logback" % "logback-classic" % "1.4.0",
   "commons-codec" % "commons-codec" % "1.15",
   "com.typesafe" % "config" % "1.4.2",
   "org.json4s" %% "json4s-native" % json4sVersion,
