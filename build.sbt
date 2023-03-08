@@ -37,7 +37,7 @@ libraryDependencies ++= Seq(
   "com.github.fge" % "json-schema-validator" % "2.2.6",
   "com.lihaoyi" %% "pprint" % "0.8.1",
   "com.github.nscala-time" %% "nscala-time" % "2.32.0",
-  "uk.gov.homeoffice" %% "rtp-test-lib" % "1.6.18-g13a878a-DPSPS-1142-DependencyUpdates-U-SNAPSHOT"
+  "uk.gov.homeoffice" %% "rtp-test-lib" % "1.6.20-gfecf245"
 )
 
 publishTo := {
