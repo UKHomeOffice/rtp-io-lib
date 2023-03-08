@@ -3,7 +3,6 @@ package uk.gov.homeoffice.json
 import java.net.{MalformedURLException, URL}
 import org.json4s.JsonAST.{JObject, JString}
 import org.json4s.jackson.JsonMethods._
-import org.scalactic.{Bad, Good}
 import org.specs2.mutable.Specification
 import grizzled.slf4j.Logging
 import uk.gov.homeoffice.json.JsonSchema.BadSchemaException
@@ -80,7 +79,7 @@ class JsonSchemaSpec extends Specification with Logging {
         "blah": "blah"
       }""")
 
-      EmptyJsonSchema.validate(whateverJson) mustEqual Good(whateverJson)
+      EmptyJsonSchema.validate(whateverJson) mustEqual Right(whateverJson)
     }
 
     "highlight errors when failing to validate against schema" in {
@@ -89,7 +88,7 @@ class JsonSchemaSpec extends Specification with Logging {
         "bad": "data"
       }""")
 
-      val Bad(JsonError(j, Some(error), _)) = JsonSchema(schema).validate(json)
+      val Left(JsonError(j, Some(error), _)) = JsonSchema(schema).validate(json)
       error must contain("""missing: ["address","phoneNumbers"]""")
       j mustEqual json
     }
@@ -113,7 +112,7 @@ class JsonSchemaSpec extends Specification with Logging {
         ]
       }""")
 
-      JsonSchema(schema) validate json mustEqual Good(json)
+      JsonSchema(schema) validate json mustEqual Right(json)
     }
 
     "validate against array schema" in {
@@ -130,7 +129,7 @@ class JsonSchemaSpec extends Specification with Logging {
         "timeZoneRegionName" : "America/Porto_Velho"
       }]""")
 
-      JsonSchema(arraySchema) validate json mustEqual Good(json)
+      JsonSchema(arraySchema) validate json mustEqual Right(json)
     }
 
     "invalidate json against array schema" in {
@@ -147,7 +146,7 @@ class JsonSchemaSpec extends Specification with Logging {
         "timeZoneRegionName" : "America/Porto_Velho"
       }]""")
 
-      val Bad(JsonError(j, Some(error), _)) = JsonSchema(arraySchema).validate(json)
+      val Left(JsonError(j, Some(error), _)) = JsonSchema(arraySchema).validate(json)
       error must contain(""""clcclclcl" is too long""")
       error must contain(""""cccRRR" is too long""")
       j mustEqual json
@@ -163,7 +162,7 @@ class JsonSchemaSpec extends Specification with Logging {
         "hash": "ABABABAABA"
       }""")
 
-      JsonSchema(oneOfSchema) validate json mustEqual Good(json)
+      JsonSchema(oneOfSchema) validate json mustEqual Right(json)
     }
 
     "invalidate against one of schema" in {
@@ -174,7 +173,7 @@ class JsonSchemaSpec extends Specification with Logging {
         "hash": "ABABABAABA"
       }""")
 
-      val Bad(JsonError(j, Some(error), _)) = JsonSchema(oneOfSchema).validate(json)
+      val Left(JsonError(j, Some(error), _)) = JsonSchema(oneOfSchema).validate(json)
       error must contain("does not match input string")
       j mustEqual json
     }

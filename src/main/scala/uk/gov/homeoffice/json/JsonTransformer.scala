@@ -3,7 +3,6 @@ package uk.gov.homeoffice.json
 import scala.util.Try
 import org.json4s.JsonDSL._
 import org.json4s.{JArray, JObject, JValue, _}
-import org.scalactic.Or
 import grizzled.slf4j.Logging
 
 /**
@@ -36,7 +35,7 @@ trait JsonTransformer extends JsonFormats with Logging {
 
   implicit def jsonToTransformation(json: JValue): JsonTransformation = JsonTransformation(json, JNothing)
 
-  def transform(json: JValue): JValue Or JsonError
+  def transform(json: JValue): Either[JsonError, JValue]
 
   /**
     * Map a JSON property from one format to another e.g. to map the JSON

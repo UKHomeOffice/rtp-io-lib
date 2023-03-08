@@ -11,23 +11,23 @@ val root = Project(id = moduleName, base = file("."))
   .settings(
     name := moduleName,
     organization := "uk.gov.homeoffice",
-    scalaVersion := "2.12.16",
-    crossScalaVersions := Seq("2.11.8", "2.12.16")
+    scalaVersion := "2.13.10",
+    crossScalaVersions := Seq("2.11.8", "2.12.16", "2.13.10")
   )
 
 resolvers ++= Seq(
   "Artifactory Snapshot Realm" at "https://artifactory.digital.homeoffice.gov.uk/artifactory/libs-snapshot-local/",
   "Artifactory Release Realm" at "https://artifactory.digital.homeoffice.gov.uk/artifactory/libs-release-local/",
-  "Typesafe Repository" at "http://repo.typesafe.com/typesafe/releases/",
+  "Typesafe Repository" at "https://repo.typesafe.com/typesafe/releases/",
   "Sonatype Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/",
   "Sonatype Releases" at "https://oss.sonatype.org/content/repositories/releases/",
-  "Kamon Repository" at "http://repo.kamon.io"
+  "Kamon Repository" at "https://repo.kamon.io"
 )
 
-val json4sVersion = "3.6.12"
+val json4sVersion = "4.0.6"
 
 libraryDependencies ++= Seq(
-  "ch.qos.logback" % "logback-classic" % "1.4.0",
+  "ch.qos.logback" % "logback-classic" % "1.4.5",
   "commons-codec" % "commons-codec" % "1.15",
   "com.typesafe" % "config" % "1.4.2",
   "org.json4s" %% "json4s-native" % json4sVersion,
@@ -35,10 +35,9 @@ libraryDependencies ++= Seq(
   "org.json4s" %% "json4s-ext" % json4sVersion,
   "org.json4s" %% "json4s-mongo" % json4sVersion,
   "com.github.fge" % "json-schema-validator" % "2.2.6",
-  "com.lihaoyi" %% "pprint" % "0.7.3",
+  "com.lihaoyi" %% "pprint" % "0.8.1",
   "com.github.nscala-time" %% "nscala-time" % "2.32.0",
-  "org.scalactic" %% "scalactic" % "3.2.13",
-  "uk.gov.homeoffice" %% "rtp-test-lib" % "1.6.18-g13a878a"
+  "uk.gov.homeoffice" %% "rtp-test-lib" % "1.6.18-g13a878a-DPSPS-1142-DependencyUpdates-U-SNAPSHOT"
 )
 
 publishTo := {

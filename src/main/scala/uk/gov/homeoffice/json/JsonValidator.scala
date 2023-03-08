@@ -2,13 +2,12 @@ package uk.gov.homeoffice.json
 
 import org.json4s._
 import org.json4s.jackson.JsonMethods._
-import org.scalactic.Or
 
 @deprecated(message = "This trait no longer adds any benefits and really should not required/used", since = "16th October 2015")
 trait JsonValidator {
   def jsonSchema: JsonSchema
 
-  def validate(json: JValue): JValue Or JsonError = jsonSchema validate json
+  def validate(json: JValue): Either[JsonError, JValue] = jsonSchema.validate(json)
 }
 
 /**
