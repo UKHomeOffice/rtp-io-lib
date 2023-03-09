@@ -2,7 +2,6 @@ package uk.gov.homeoffice.json
 
 import java.net.{MalformedURLException, URL}
 import scala.util.Success
-import org.scalactic.Good
 import org.specs2.mutable.Specification
 import uk.gov.homeoffice.json.JsonSchema.BadSchemaException
 
@@ -34,7 +33,7 @@ class JsonValidatorSpec extends Specification with Json with JsonFormats {
       }
 
       jsonFromClasspath("/test.json").map(validator.validate) must beLike {
-        case Success(Good(j)) => (j \ "blah").extract[String] mustEqual "whatever"
+        case Success(Right(j)) => (j \ "blah").extract[String] mustEqual "whatever"
       }
     }
   }

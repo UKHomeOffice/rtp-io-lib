@@ -36,7 +36,7 @@ To run integration specs:
 
 Publishing
 ----------
-To publish the jar to artifactory you will need to 
+To publish the jar to artifactory you will need to
 
 1. Copy the .credentials file into your <home directory>/.ivy2/
 2. Edit this .credentials file to fill in the artifactory security credentials (amend the realm name and host where necessary)
@@ -51,8 +51,8 @@ Example Usage
 ```scala
   val json: JValue = getYourJson()
   val schema: JValue = getYourSchema()
-  
-  val Good(result) = JsonSchema(schema).validate(json) // Assuming successful validation
+
+  val Right(result) = JsonSchema(schema).validate(json) // Assuming successful validation
 ```
 
 - Transform JSON from one structure to another:
@@ -63,11 +63,11 @@ Example Usage
         map("name" -> "superName") ~
         mapArray("fee" -> "payment.feeInPence", field => JInt(BigInt(field.extract[String])))
       )(json)
-      
-      Good(newJson)
+
+      Right(newJson)
     }
   }
-  
+
   val flatJson = parse("""
   {
     "name": "Batman",
@@ -87,7 +87,7 @@ Example Usage
   }""")
 
   // Assuming successful transformation
-  transform(flatJson) mustEqual Good(json) 
+  transform(flatJson) mustEqual Right(json)
 ```
 
 Note - if required (though not advised) the EmptyJsonSchema can be used to all JSON to be validated successfully.
