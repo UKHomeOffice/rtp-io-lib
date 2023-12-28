@@ -12,7 +12,7 @@ val root = Project(id = moduleName, base = file("."))
     name := moduleName,
     organization := "uk.gov.homeoffice",
     scalaVersion := "2.13.12",
-    crossScalaVersions := Seq("2.11.8", "2.12.16", "2.13.12")
+    crossScalaVersions := Seq("2.12.16", "2.13.12")
   )
 
 resolvers ++= Seq(
