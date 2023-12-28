@@ -11,8 +11,8 @@ val root = Project(id = moduleName, base = file("."))
   .settings(
     name := moduleName,
     organization := "uk.gov.homeoffice",
-    scalaVersion := "2.13.10",
-    crossScalaVersions := Seq("2.11.8", "2.12.16", "2.13.10")
+    scalaVersion := "2.13.12",
+    crossScalaVersions := Seq("2.11.8", "2.12.16", "2.13.12")
   )
 
 resolvers ++= Seq(
@@ -27,9 +27,9 @@ resolvers ++= Seq(
 val json4sVersion = "4.0.6"
 
 libraryDependencies ++= Seq(
-  "ch.qos.logback" % "logback-classic" % "1.4.5",
-  "commons-codec" % "commons-codec" % "1.15",
-  "com.typesafe" % "config" % "1.4.2",
+  "ch.qos.logback" % "logback-classic" % "1.4.14",
+  "commons-codec" % "commons-codec" % "1.16.0",
+  "com.typesafe" % "config" % "1.4.3",
   "org.json4s" %% "json4s-native" % json4sVersion,
   "org.json4s" %% "json4s-jackson" % json4sVersion,
   "org.json4s" %% "json4s-ext" % json4sVersion,
