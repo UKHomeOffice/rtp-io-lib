@@ -38,20 +38,6 @@ steps:
     - push
     - tag
 
-- name: drone_s3_cache_push
-  pull: if-not-exists
-  image: quay.io/ukhomeofficedigital/drone-s3cache:v0.2.0
-  settings:
-    drone_s3_cache_folders: rtp-io-lib/.ivy2
-    drone_s3_cache_mode: push
-  environment:
-    DRONE_S3_CACHE_AWS_ACCESS_KEY_ID:
-      from_secret: DRONE_S3_CACHE_AWS_ACCESS_KEY_ID
-    DRONE_S3_CACHE_AWS_SECRET_ACCESS_KEY:
-      from_secret: DRONE_S3_CACHE_AWS_SECRET_ACCESS_KEY
-  depends_on:
-    - build
-
 - name: publish
   pull: if-not-exists
   image: quay.io/ukhomeofficedigital/scala-sbt:latest
@@ -64,9 +50,25 @@ steps:
     ARTIFACTORY_SERVER: https://artifactory.digital.homeoffice.gov.uk/
     ARTIFACTORY_USERNAME: regt-build-bot
     JRE_VERSION: 17
+  depends_on:
+    - build
   when:
     event:
     - push
     - tag
+
+- name: drone_s3_cache_push
+  pull: if-not-exists
+  image: quay.io/ukhomeofficedigital/drone-s3cache:v0.2.0
+  settings:
+    drone_s3_cache_folders: rtp-io-lib/.ivy2
+    drone_s3_cache_mode: push
+  environment:
+    DRONE_S3_CACHE_AWS_ACCESS_KEY_ID:
+      from_secret: DRONE_S3_CACHE_AWS_ACCESS_KEY_ID
+    DRONE_S3_CACHE_AWS_SECRET_ACCESS_KEY:
+      from_secret: DRONE_S3_CACHE_AWS_SECRET_ACCESS_KEY
+  depends_on:
+    - publish
 
 ...
