@@ -63,6 +63,7 @@ steps:
       from_secret: ARTIFACTORY_PASSWORD
     ARTIFACTORY_SERVER: https://artifactory.digital.homeoffice.gov.uk/
     ARTIFACTORY_USERNAME: regt-build-bot
+    JRE_VERSION: 17
   when:
     event:
     - push
