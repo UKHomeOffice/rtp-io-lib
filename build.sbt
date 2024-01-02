@@ -11,7 +11,8 @@ val root = Project(id = moduleName, base = file("."))
   .settings(
     name := moduleName,
     organization := "uk.gov.homeoffice",
-    scalaVersion := "2.13.12"
+    scalaVersion := "2.13.12",
+    crossScalaVersions := Seq("2.11.8", "2.12.16", "2.13.12")
   )
 
 resolvers ++= Seq(
@@ -36,7 +37,7 @@ libraryDependencies ++= Seq(
   "com.github.fge" % "json-schema-validator" % "2.2.6",
   "com.lihaoyi" %% "pprint" % "0.8.1",
   "com.github.nscala-time" %% "nscala-time" % "2.32.0",
-  "uk.gov.homeoffice" %% "rtp-test-lib" % "1.6.20-gfecf245"
+  "uk.gov.homeoffice" %% "rtp-test-lib" % "1.6.22-gacd233d"
 )
 
 publishTo := {
