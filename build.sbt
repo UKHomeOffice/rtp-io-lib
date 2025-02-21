@@ -27,14 +27,12 @@ val root = Project(id = moduleName, base = file("."))
         case Some((2, 12)) => Seq(
           "org.json4s" %% "json4s-native" % "3.6.12",
           "org.json4s" %% "json4s-jackson" % "3.6.12",
-          "org.json4s" %% "json4s-ext" % "3.6.12",
-          "org.json4s" %% "json4s-mongo" % "3.6.12",
+          "org.json4s" %% "json4s-ext" % "3.6.12"
         )
         case _ => Seq(
           "org.json4s" %% "json4s-native" % "4.0.7",
           "org.json4s" %% "json4s-jackson" % "4.0.7",
-          "org.json4s" %% "json4s-ext" % "4.0.7",
-          "org.json4s" %% "json4s-mongo" % "4.0.7",
+          "org.json4s" %% "json4s-ext" % "4.0.7"
         )
       }}
     }
