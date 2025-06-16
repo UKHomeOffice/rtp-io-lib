@@ -13,9 +13,9 @@ steps:
   pull: if-not-exists
   image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/rtge/scala-sbt:latest
   commands:
+  - . /app/entrypoint.sh
   - ./.set-repos.sh
   - /bin/cat /app/.sbt/repositories
-  - . /app/entrypoint.sh
   - git fetch --tags
   - sbt clean coverage test coverageReport coverageOff
   - sbt dependencyCheck
