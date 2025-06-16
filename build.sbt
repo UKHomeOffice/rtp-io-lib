@@ -9,33 +9,18 @@ val root = Project(id = moduleName, base = file("."))
   .settings(
     name := moduleName,
     organization := "uk.gov.homeoffice",
-    scalaVersion := "2.13.14",
-    crossScalaVersions := Seq("2.12.16", "2.13.14"),
-    libraryDependencies ++= { Seq(
-        "ch.qos.logback" % "logback-classic" % "1.4.14",
-        "commons-codec" % "commons-codec" % "1.16.0",
+    scalaVersion := "3.3.5",
+    crossScalaVersions := Seq("3.3.5", "2.13.16"),
+    libraryDependencies ++= Seq(
+        "ch.qos.logback" % "logback-classic" % "1.5.18",
+        "commons-codec" % "commons-codec" % "1.18.0",
         "com.typesafe" % "config" % "1.4.3",
-        "org.json4s" %% "json4s-native" % "3.6.12",
-        "org.json4s" %% "json4s-jackson" % "3.6.12",
-        "org.json4s" %% "json4s-ext" % "3.6.12",
         "com.github.fge" % "json-schema-validator" % "2.2.6",
-        "com.lihaoyi" %% "pprint" % "0.8.1",
-        "com.github.nscala-time" %% "nscala-time" % "2.32.0",
-        "uk.gov.homeoffice" %% "rtp-test-lib" % "1.6.22-gacd233d"
-      ) ++ {
-      CrossVersion.partialVersion(scalaVersion.value) match {
-        case Some((2, 12)) => Seq(
-          "org.json4s" %% "json4s-native" % "3.6.12",
-          "org.json4s" %% "json4s-jackson" % "3.6.12",
-          "org.json4s" %% "json4s-ext" % "3.6.12"
-        )
-        case _ => Seq(
-          "org.json4s" %% "json4s-native" % "4.0.7",
-          "org.json4s" %% "json4s-jackson" % "4.0.7",
-          "org.json4s" %% "json4s-ext" % "4.0.7"
-        )
-      }}
-    }
+        "uk.gov.homeoffice" %% "rtp-test-lib" % "1.6.37-g813af7a",
+        "org.json4s" %% "json4s-native" % "4.0.7",
+        "org.json4s" %% "json4s-jackson" % "4.0.7",
+        "org.json4s" %% "json4s-ext" % "4.0.7"
+      )
   )
 
 resolvers ++= Seq(

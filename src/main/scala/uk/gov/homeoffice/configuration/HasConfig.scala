@@ -1,7 +1,7 @@
 package uk.gov.homeoffice.configuration
 
-import com.typesafe.config.ConfigFactory
+import com.typesafe.config.{Config, ConfigFactory}
 
-trait HasConfig extends ConfigFactorySupport {
-  implicit val config = ConfigFactory.load
+trait HasConfig {
+  implicit val config :Config = ConfigFactory.load
 }

@@ -6,6 +6,7 @@ import org.json4s.JsonDSL._
 import scala.language.postfixOps
 
 case class JsonError(json: JValue = JNothing, error: Option[String] = None, throwable: Option[Throwable] = None) {
+
   @deprecated(message = "Use toJson instead which renders any JSON under a 'json' property", since = "30th March 2015")
   def asJson = JObject() merge json merge {
     error.fold(JObject()) { error => "error" -> error }
