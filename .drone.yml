@@ -40,7 +40,7 @@ steps:
     ARTIFACTORY_USERNAME: regt-build-bot
     JRE_VERSION: 21
     OVERRIDE_BUILD_REPOS: "false"
-    HOME=/app
+    HOME: "/app"
   when:
     event:
     - push
