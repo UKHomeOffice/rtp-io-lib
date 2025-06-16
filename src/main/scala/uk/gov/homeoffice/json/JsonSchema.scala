@@ -6,7 +6,7 @@ import scala.util.{Failure, Success}
 import com.github.fge.jackson.JsonLoader
 import com.github.fge.jsonschema.core.exceptions.ProcessingException
 import com.github.fge.jsonschema.main.JsonSchemaFactory
-import org.json4s.JValue
+import org.json4s._
 import org.json4s.JsonAST.JNothing
 import org.json4s.jackson.JsonMethods._
 import uk.gov.homeoffice.json.JsonSchema.Validator

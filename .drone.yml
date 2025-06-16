@@ -21,18 +21,34 @@ steps:
     DRONE_S3_CACHE_AWS_SECRET_ACCESS_KEY:
       from_secret: DRONE_S3_CACHE_AWS_SECRET_ACCESS_KEY
 
+- name: sonar-scanner
+  pull: if-not-exists
+  image: quay.io/ukhomeofficedigital/sonar-scanner:v4.6
+  commands:
+  - sonar-scanner
+  when:
+    event:
+    - push
+    - tag
+  depends_on:
+    - build
+
 - name: build
   pull: if-not-exists
-  image: quay.io/ukhomeofficedigital/scala-sbt:latest
+  image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/rtge/scala-sbt:latest
   commands:
-  - /root/entrypoint.sh
+  - . /app/entrypoint.sh
   - git fetch --tags
-  - sbt clean test
+  - sbt clean coverage test coverageReport coverageOff
+  - sbt dependencyCheck
+  - sbt scalastyle
+  - sbt scapegoat
+  - sbt test
   environment:
     ARTIFACTORY_PASSWORD:
       from_secret: ARTIFACTORY_PASSWORD
     ARTIFACTORY_USERNAME: regt-build-bot
-    JRE_VERSION: 17
+    JRE_VERSION: 21
   when:
     event:
     - push
@@ -40,16 +56,15 @@ steps:
 
 - name: publish
   pull: if-not-exists
-  image: quay.io/ukhomeofficedigital/scala-sbt:latest
+  image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/rtge/scala-sbt:latest
   commands:
-  - /root/entrypoint.sh
+  - . /app/entrypoint.sh
   - sbt +publish
   environment:
     ARTIFACTORY_PASSWORD:
       from_secret: ARTIFACTORY_PASSWORD
-    ARTIFACTORY_SERVER: https://artifactory.digital.homeoffice.gov.uk/
     ARTIFACTORY_USERNAME: regt-build-bot
-    JRE_VERSION: 17
+    JRE_VERSION: 21
   depends_on:
     - build
   when:
