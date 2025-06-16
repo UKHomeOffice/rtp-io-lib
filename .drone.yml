@@ -17,6 +17,7 @@ steps:
   - . /app/entrypoint.sh
   - /bin/cat /app/.sbt/repositories
   - git fetch --tags
+  - sbt test
   - sbt clean coverageEnabled test coverageReport coverageOff
   - sbt dependencyCheck
   - sbt scalastyle
