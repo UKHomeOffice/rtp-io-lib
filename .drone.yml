@@ -16,10 +16,13 @@ steps:
   - . /app/entrypoint.sh
   - rm -f /app/.sbt/repositories
   - sbt test || /bin/true
+  - OVERRIDE_BUILD_REPOS="false" sbt test || /bin/true
+  - OVERRIDE_BUILD_REPOS="true" sbt test || /bin/true
   - ./.set-repos.sh
   - /bin/cat /app/.sbt/repositories
   - git fetch --tags
-  - sbt clean coverage test coverageReport coverageOff
+  - sbt clean coverageEnabled test coverageReport coverageOff
+  - sbt dependencyCheck || /bin/true
   - sbt dependencyCheck
   - sbt scalastyle
   - sbt scapegoat
