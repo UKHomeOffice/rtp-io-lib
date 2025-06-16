@@ -10,7 +10,7 @@ platform:
 steps:
 
 - name: build
-  pull: if-not-exists
+  pull: always
   image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/rtge/scala-sbt:latest
   commands:
   - . /app/entrypoint.sh
