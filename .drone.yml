@@ -37,6 +37,7 @@ steps:
       from_secret: ARTIFACTORY_PASSWORD
     ARTIFACTORY_USERNAME: regt-build-bot
     JRE_VERSION: 21
+    OVERRIDE_BUILD_REPOS: "false"
   when:
     event:
     - push
@@ -65,6 +66,7 @@ steps:
       from_secret: ARTIFACTORY_PASSWORD
     ARTIFACTORY_USERNAME: regt-build-bot
     JRE_VERSION: 21
+    OVERRIDE_BUILD_REPOS: "false"
   depends_on:
     - sonar-scanner
   when:
