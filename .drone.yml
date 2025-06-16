@@ -21,18 +21,6 @@ steps:
     DRONE_S3_CACHE_AWS_SECRET_ACCESS_KEY:
       from_secret: DRONE_S3_CACHE_AWS_SECRET_ACCESS_KEY
 
-- name: sonar-scanner
-  pull: if-not-exists
-  image: quay.io/ukhomeofficedigital/sonar-scanner:v4.6
-  commands:
-  - sonar-scanner
-  when:
-    event:
-    - push
-    - tag
-  depends_on:
-    - build
-
 - name: build
   pull: if-not-exists
   image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/rtge/scala-sbt:latest
@@ -53,6 +41,18 @@ steps:
     event:
     - push
     - tag
+
+- name: sonar-scanner
+  pull: if-not-exists
+  image: quay.io/ukhomeofficedigital/sonar-scanner:v4.6
+  commands:
+  - sonar-scanner
+  when:
+    event:
+    - push
+    - tag
+  depends_on:
+    - build
 
 - name: publish
   pull: if-not-exists
