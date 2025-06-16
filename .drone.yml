@@ -25,7 +25,7 @@ steps:
   pull: if-not-exists
   image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/rtge/scala-sbt:latest
   commands:
-  - /bin/echo -en "[repositories]\n  local\n  lib-releases: https://artifactory.digital.homeoffice.gov.uk/artifactory/libs-release/\n  lib-snapshots: https://artifactory.digital.homeoffice.gov.uk/artifactory/libs-snapshot/\n" > /app/.sbt/repositories
+  - ./set-repos.sh
   - . /app/entrypoint.sh
   - git fetch --tags
   - sbt clean coverage test coverageReport coverageOff
