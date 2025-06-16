@@ -13,16 +13,11 @@ steps:
   pull: if-not-exists
   image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/rtge/scala-sbt:latest
   commands:
-  - . /app/entrypoint.sh
-  - rm -f /app/.sbt/repositories
-  - sbt test || /bin/true
-  - OVERRIDE_BUILD_REPOS="false" sbt test || /bin/true
-  - OVERRIDE_BUILD_REPOS="true" sbt test || /bin/true
   - ./.set-repos.sh
+  - . /app/entrypoint.sh
   - /bin/cat /app/.sbt/repositories
   - git fetch --tags
   - sbt clean coverageEnabled test coverageReport coverageOff
-  - sbt dependencyCheck || /bin/true
   - sbt dependencyCheck
   - sbt scalastyle
   - sbt scapegoat
@@ -33,6 +28,7 @@ steps:
     ARTIFACTORY_USERNAME: regt-build-bot
     JRE_VERSION: 21
     HOME: "/app"
+    OVERRIDE_BUILD_REPOS: "false"
   when:
     event:
     - push

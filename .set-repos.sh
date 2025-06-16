@@ -1,3 +1,3 @@
 #!/bin/bash
 
-echo -en "[repositories]\n  local\n  lib-releases: https://artifactory.digital.homeoffice.gov.uk/artifactory/libs-release/\n  lib-snapshots: https://artifactory.digital.homeoffice.gov.uk/artifactory/libs-snapshot/\n" > /app/.sbt/repositories
+echo -en "[repositories]\n local\n lib-releases: https://artifactory.digital.homeoffice.gov.uk/artifactory/libs-release/\n lib-snapshots: https://artifactory.digital.homeoffice.gov.uk/artifactory/libs-snapshot/\n remote-ivy-repos: https://artifactory.digital.homeoffice.gov.uk/artifactory/remote-ivy-repos/, [organisation]/[module]/(scala_[scalaVersion]/)(sbt_[sbtVersion]/)[revision]/[type]s/[artifact](-[classifier]).[ext]\n remote-repos: https://artifactory.digital.homeoffice.gov.uk/artifactory/remote-repos/\n jcenter-cache: https://artifactory.digital.homeoffice.gov.uk/artifactory/jcenter-cache/\n jitpack: https://artifactory.digital.homeoffice.gov.uk/artifactory/jitpack_remote/\n" > /app/.sbt/repositories
