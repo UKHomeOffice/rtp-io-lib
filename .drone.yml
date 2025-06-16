@@ -14,7 +14,7 @@ steps:
   image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/rtge/scala-sbt:latest
   commands:
   - ./.set-repos.sh
-  - . /app/entrypoint.sh
+  - OVERRIDE_BUILD_REPOS="false" JRE_VERSION="21" HOME=/app . /app/entrypoint.sh
   - /bin/cat /app/.sbt/repositories
   - git fetch --tags
   - sbt test
