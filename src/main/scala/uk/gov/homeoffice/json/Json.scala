@@ -102,4 +102,12 @@ trait Json extends IO {
     def merge(json: JValue) = (jfield: JValue) merge json
   }
 
+  implicit class JValueOps(json: JValue) {
+    /** In scope of the following functions */
+    implicit val j = json
+
+    def replace[V : JValuable](transformation: (JValue, V)) = JValuable replace transformation
+
+    def transform[V : JValuable](transformation: (JValue, V => V)) = JValuable transform transformation
+  }
 }
