@@ -4,6 +4,7 @@ import java.net.{MalformedURLException, URL}
 import scala.util.Success
 import org.specs2.mutable.Specification
 import uk.gov.homeoffice.json.JsonSchema.BadSchemaException
+import org.json4s._
 
 class JsonValidatorSpec extends Specification with Json with JsonFormats {
   "Json validation" should {

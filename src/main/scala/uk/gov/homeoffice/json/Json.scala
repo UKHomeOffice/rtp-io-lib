@@ -3,8 +3,7 @@ package uk.gov.homeoffice.json
 import java.net.URL
 import scala.io.{Codec, Source}
 import scala.util.Try
-import com.google.json.JsonSanitizer._
-import org.json4s.JValue
+import org.json4s._
 import org.json4s.JsonDSL._
 import org.json4s.jackson.JsonMethods._
 import uk.gov.homeoffice.io.IO
@@ -27,7 +26,7 @@ trait Json extends IO {
   def toJson(s: String): Try[JValue] = Try {
     val string = s.replaceAll("[\n\r]", "").trim
 
-    if (string.startsWith("{") && string.endsWith("}")) parse(sanitize(string))
+    if (string.startsWith("{") && string.endsWith("}")) parse(string)
     else throw new Exception(s"The given string does not start with { and/or end with }, as JSON should be: $string")
   }
 
@@ -103,12 +102,4 @@ trait Json extends IO {
     def merge(json: JValue) = (jfield: JValue) merge json
   }
 
-  implicit class JValueOps(json: JValue) {
-    /** In scope of the following functions */
-    implicit val j = json
-
-    def replace[V : JValuable](transformation: (JValue, V)) = JValuable replace transformation
-
-    def transform[V : JValuable](transformation: (JValue, V => V)) = JValuable transform transformation
-  }
 }
