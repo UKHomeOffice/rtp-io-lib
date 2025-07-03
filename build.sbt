@@ -15,11 +15,15 @@ val root = Project(id = moduleName, base = file("."))
         "ch.qos.logback" % "logback-classic" % "1.5.18",
         "commons-codec" % "commons-codec" % "1.18.0",
         "com.typesafe" % "config" % "1.4.3",
-        "com.github.fge" % "json-schema-validator" % "2.2.6",
+        // json-schema-validator depends on guava but isn't upto date,
+        // so we include it, to ensure we are on a secure version, even
+        // though we don't directly depend on it.
+        "com.google.guava" % "guava" % "33.4.8-android",
+        "com.github.java-json-tools" % "json-schema-validator" % "2.2.14",
         "uk.gov.homeoffice" %% "rtp-test-lib" % "1.6.37-g813af7a",
-        "org.json4s" %% "json4s-native" % "4.0.7",
-        "org.json4s" %% "json4s-jackson" % "4.0.7",
-        "org.json4s" %% "json4s-ext" % "4.0.7"
+        "org.json4s" %% "json4s-native" % "4.1.0-M8",
+        "org.json4s" %% "json4s-jackson" % "4.1.0-M8",
+        "org.json4s" %% "json4s-ext" % "4.1.0-M8"
       )
   )
 
